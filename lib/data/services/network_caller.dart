@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 import 'package:task_scheduler/application/app.dart';
 import 'package:task_scheduler/data/models/network_response.dart';
 import 'package:task_scheduler/presentation/state_holders/auth_controller.dart';
-import 'package:task_scheduler/presentation/ui/screens/stu_fac_choice_screen.dart';
+import 'package:task_scheduler/presentation/ui/screens/main_screen.dart';
 
 class NetworkCaller {
   static Future<NetworkResponse> getRequest(String url, String token) async {

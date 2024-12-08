@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:task_scheduler/presentation/ui/screens/guest_screens/guest_auth/guest_login_screen.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_auth/host_login_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
@@ -9,15 +10,15 @@ import 'package:task_scheduler/presentation/ui/widgets/title_and_subtitle.dart';
 import '../../../widgets/new_confirm_password_text_field.dart';
 import '../../../widgets/customised_elevated_button.dart';
 
-class HostSignUpScreen extends StatefulWidget {
-  const HostSignUpScreen({super.key, required this.email});
+class GuestSignUpScreen extends StatefulWidget {
+  const GuestSignUpScreen({super.key, required this.email});
   final String email;
 
   @override
-  State<HostSignUpScreen> createState() => _HostSignUpScreenState();
+  State<GuestSignUpScreen> createState() => _GuestSignUpScreenState();
 }
 
-class _HostSignUpScreenState extends State<HostSignUpScreen> {
+class _GuestSignUpScreenState extends State<GuestSignUpScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _newPassTEController = TextEditingController();
   final TextEditingController _confirmPassTEController =
@@ -36,7 +37,7 @@ class _HostSignUpScreenState extends State<HostSignUpScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const TitleAndSubtitle(
-                      title: 'SIGN UP', subtitle: 'Join as a Host'),
+                      title: 'SIGN UP', subtitle: 'Join as a Guest'),
                   const AppLogo(),
                   SizedBox(
                     height: 77.h,
@@ -75,13 +76,13 @@ class _HostSignUpScreenState extends State<HostSignUpScreen> {
                     onTap: () async {},
                     text: 'SIGN UP',
                   ),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: 20.h,
                   ),
                   InkWell(
                     onTap: () {
                       Get.to(
-                        () => const HostLogInScreen(),
+                        () => const GuestLogInScreen(),
                       );
                     },
                     child: Text('Login', style: TextStyle(fontSize: 20.w),),

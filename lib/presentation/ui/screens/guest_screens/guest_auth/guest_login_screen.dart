@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:task_scheduler/presentation/ui/screens/guest_screens/guest_edit_profile_screen.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_edit_profile_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/customised_elevated_button.dart';
@@ -8,14 +9,14 @@ import 'package:task_scheduler/presentation/ui/widgets/password_text_field.dart'
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 import 'package:task_scheduler/presentation/ui/widgets/title_and_subtitle.dart';
 
-class HostLogInScreen extends StatefulWidget {
-  const HostLogInScreen({super.key});
+class GuestLogInScreen extends StatefulWidget {
+  const GuestLogInScreen({super.key});
 
   @override
-  State<HostLogInScreen> createState() => _HostLogInScreenState();
+  State<GuestLogInScreen> createState() => _GuestLogInScreenState();
 }
 
-class _HostLogInScreenState extends State<HostLogInScreen> {
+class _GuestLogInScreenState extends State<GuestLogInScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _passTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -30,7 +31,7 @@ class _HostLogInScreenState extends State<HostLogInScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const TitleAndSubtitle(title: 'LOG IN', subtitle: 'Host'),
+                const TitleAndSubtitle(title: 'LOG IN', subtitle: 'Guest'),
                 const AppLogo(),
                 SizedBox(
                   height: 76.h,
@@ -66,7 +67,7 @@ class _HostLogInScreenState extends State<HostLogInScreen> {
                 CustomisedElevatedButton(
                   onTap: () async {
                     Get.to(
-                      () => const HostEditProfileScreen(),
+                      () => const GuestEditProfileScreen(),
                     );
                   },
                   text: 'LOG IN',
