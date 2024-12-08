@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:task_scheduler/presentation/ui/screens/guest_screens/guest_edit_profile_screen.dart';
+import 'package:task_scheduler/presentation/ui/screens/host_screens/host_edit_profile_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/customised_elevated_button.dart';
 import 'package:task_scheduler/presentation/ui/widgets/password_text_field.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 import 'package:task_scheduler/presentation/ui/widgets/title_and_subtitle.dart';
 
-import '../../../../../data/utility/urls.dart';
-
-class HostLogInScreen extends StatefulWidget {
-  const HostLogInScreen({super.key});
+class GuestLogInScreen extends StatefulWidget {
+  const GuestLogInScreen({super.key});
 
   @override
-  State<HostLogInScreen> createState() => _HostLogInScreenState();
+  State<GuestLogInScreen> createState() => _GuestLogInScreenState();
 }
 
-class _HostLogInScreenState extends State<HostLogInScreen> {
+class _GuestLogInScreenState extends State<GuestLogInScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _passTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool inProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +31,7 @@ class _HostLogInScreenState extends State<HostLogInScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const TitleAndSubtitle(title: 'LOG IN', subtitle: 'Host'),
+                const TitleAndSubtitle(title: 'LOG IN', subtitle: 'Guest'),
                 const AppLogo(),
                 SizedBox(
                   height: 76.h,
@@ -43,9 +43,7 @@ class _HostLogInScreenState extends State<HostLogInScreen> {
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(hintText: 'Email'),
                     validator: (String? value) {
-                      if (value
-                          ?.trim()
-                          .isEmpty ?? true) {
+                      if (value?.trim().isEmpty ?? true) {
                         return 'Please enter your email';
                       }
                       if (value!.isEmail == false) {
@@ -68,46 +66,34 @@ class _HostLogInScreenState extends State<HostLogInScreen> {
                 ),
                 CustomisedElevatedButton(
                   onTap: () async {
-                    if (_formKey.currentState!.validate()) {
-                      inProgress = true;
-                      setState(() {});
-
-                      final result = await NetworkCaller().postMethod(
-                          Urls.hostLogin,
-                          body: {
-                            'email': _emailTEController.text.trim(),
-                            'password': _passTEController.text,
-                          });
-
-                      inProgress = false;
-                      setState(() {});
-                      if (result != null && result['status'] == 'success') {
-                        _emailTEController.clear();
-                        _passTEController.clear();
-
-                        if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Login Successful!',
-                                  style: TextStyle(color: Colors.white)),
-                                  backgroundColor: Colors.green));
-                          Navigator.pushAndRemoveUntil(context,
-                              MaterialPageRoute(
-                                  builder: (
-                                      context) => const HostLogInScreen()), (
-                                  route) => false);
-                        }
-                      } else {
-                        if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Failed',
-                                  style: TextStyle(color: Colors.white)),
-                                  backgroundColor: Colors.red));
-                        }
-                      }
-                    }
+                    Get.to(
+                      () => const GuestEditProfileScreen(),
+                    );
                   },
                   text: 'LOG IN',
                 ),
+                /*GetBuilder<FacSignInController>(
+                  builder: (facLoginController) {
+                    if (facLoginController.facSignInInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.teal,
+                        ),
+                      );
+                    }
+                    return CustomisedElevatedButton(
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          facSignIn(facLoginController);
+                        }
+                        // Get.to(
+                        //   () => const FacHomeScreen(),
+                        // );
+                      },
+                      text: 'SIGN IN',
+                    );
+                  },
+                ),*/
                 SizedBox(
                   height: 34.h,
                 ),
@@ -118,4 +104,22 @@ class _HostLogInScreenState extends State<HostLogInScreen> {
       ),
     );
   }
+
+/*  Future<void> facSignIn(FacSignInController facLoginController) async {
+    final result = await facLoginController.facSignIn(
+      _emailTEController.text.trim(),
+      */ /*('${_emailTEController.text.trim()}@lus.ac.bd'),*/ /*
+      _passTEController.text.trim(),
+    );
+
+    if (result) {
+      Get.snackbar('Successful!', facLoginController.message);
+      Get.offAll(
+            () => const FacMainBottomNavBarScreen(),
+      );
+    } else {
+      Get.snackbar('Failed!', facLoginController.message,
+          colorText: Colors.redAccent);
+    }
+  }*/
 }

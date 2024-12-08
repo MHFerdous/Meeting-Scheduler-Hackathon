@@ -1,36 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:task_scheduler/presentation/ui/screens/host_screens/edit_profile_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/customised_elevated_button.dart';
-import 'package:task_scheduler/presentation/ui/widgets/password_text_field.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
-import 'package:task_scheduler/presentation/ui/widgets/title_and_subtitle.dart';
 
-class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
+import '../../widgets/appbar_method.dart';
+
+class GuestEditProfileScreen extends StatefulWidget {
+  const GuestEditProfileScreen({super.key});
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  State<GuestEditProfileScreen> createState() => _GuestEditProfileScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
-  final TextEditingController _emailTEController = TextEditingController();
-  final TextEditingController _passTEController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class _GuestEditProfileScreenState extends State<GuestEditProfileScreen> {
+  final TextEditingController _hostDesignation = TextEditingController();
+  final TextEditingController _companyName = TextEditingController();
+  final TextEditingController _contactNumber = TextEditingController();
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: customisedAppBar(scaffoldKey, context),
       body: ScreenBackground(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const TitleAndSubtitle(title: '', subtitle: ''),
+              children: [/**/
+                const SizedBox(height: 80,),
                 const AppLogo(),
                 SizedBox(
                   height: 30.h,
@@ -38,14 +41,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Host Full Name',
+                    const Text(
+                      'Guest Full Name',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    IconButton(onPressed: (){}, icon: Icon(Icons.edit),),
+                    IconButton(onPressed: (){}, icon: const Icon(Icons.edit),),
                   ],
                 ),
                 SizedBox(
@@ -54,7 +57,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 SizedBox(
                   width: 323.w,
                   child: TextFormField(
-                    controller: _emailTEController,
+                    controller: _hostDesignation,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(hintText: 'Host Designation'),
                     validator: (String? value) {
@@ -71,9 +74,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 SizedBox(
                   width: 323.w,
                   child: TextFormField(
-                    controller: _emailTEController,
+                    controller: _companyName,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(hintText: 'Company Name'),
+                    validator: (String? value) {
+                      if (value?.trim().isEmpty ?? true) {
+                        return 'Please enter your Company name';
+                      }
+                      if (value!.isEmail == false) {
+                        return 'Enter a valid email';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 12.h,
+                ),
+
+                SizedBox(
+                  width: 323.w,
+                  child: TextFormField(
+                    controller: _contactNumber,
+                    textInputAction: TextInputAction.next,
+                    decoration: const InputDecoration(hintText: 'Contact Number'),
                     validator: (String? value) {
                       if (value?.trim().isEmpty ?? true) {
                         return 'Please enter your Company name';
@@ -91,9 +115,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 SizedBox(
                   width: 323.w,
                   child: TextFormField(
-                    controller: _emailTEController,
+                    controller: _companyName,
                     textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(hintText: 'Contact Number'),
+                    decoration: const InputDecoration(hintText: 'Time Zone'),
                     validator: (String? value) {
                       if (value?.trim().isEmpty ?? true) {
                         return 'Please enter your number';
@@ -106,43 +130,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 12.h,
-                ),
-
-
-                SizedBox(
                   height: 30.h,
                 ),
                 CustomisedElevatedButton(
                   onTap: () async {
                     Get.to(
-                      () => const EditProfileScreen(),
+                      () => const GuestEditProfileScreen(),
                     );
                   },
                   text: 'LOG IN',
                 ),
-                /*GetBuilder<FacSignInController>(
-                  builder: (facLoginController) {
-                    if (facLoginController.facSignInInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.teal,
-                        ),
-                      );
-                    }
-                    return CustomisedElevatedButton(
-                      onTap: () async {
-                        if (_formKey.currentState!.validate()) {
-                          facSignIn(facLoginController);
-                        }
-                        // Get.to(
-                        //   () => const FacHomeScreen(),
-                        // );
-                      },
-                      text: 'SIGN IN',
-                    );
-                  },
-                ),*/
+            
                 SizedBox(
                   height: 34.h,
                 ),

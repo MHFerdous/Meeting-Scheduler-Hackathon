@@ -8,20 +8,21 @@ AppBar customisedAppBar( GlobalKey<ScaffoldState> scaffoldKey,
   return AppBar(
     automaticallyImplyLeading: false,
     backgroundColor: Colors.white,
-    elevation: 0.25.h,
+    elevation: 2.h,
     leading: IconButton(
       icon: const AppLogo(),
       onPressed: () {
         scaffoldKey.currentState!.openDrawer();
       },
     ),
-   /* title: Text(
-      appBarAuth.toString(),
+    title: Text(
+      //appBarAuth.toString(),
+      "Host Email",
       style: TextStyle(
         fontSize: 16.h,
         fontWeight: FontWeight.w500,
       ),
-    ),*/
+    ),
     actions: [
       IconButton(
         onPressed: () async {

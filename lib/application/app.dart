@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:task_scheduler/presentation/ui/screens/host_screens/host_auth/host_signup_screen.dart';
-import 'package:task_scheduler/presentation/ui/screens/stu_fac_choice_screen.dart';
+import 'package:task_scheduler/presentation/ui/screens/main_screen.dart';
 import 'package:task_scheduler/presentation/ui/utility/app_colors.dart';
 
 import 'controller_binders.dart';
@@ -24,7 +23,7 @@ class MeetingSchedulerState extends State<MeetingScheduler> {
       builder: (context, child) => GetMaterialApp(
         useInheritedMediaQuery: true,
         navigatorKey: MeetingScheduler.globalKey,
-        home: const HostSignUpScreen(email: ''),
+        home: const HostGuestChoiceScreen(),
         initialBinding: GetXBindings(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -51,7 +50,7 @@ class MeetingSchedulerState extends State<MeetingScheduler> {
             contentPadding:
                 EdgeInsets.symmetric(horizontal: 18.w, vertical: 20.h),
             filled: true,
-            fillColor: AppColors.primaryColor,
+            fillColor: Colors.white,
             hintStyle: TextStyle(
                 fontSize: 16.sp,
                 color: const Color(0xFF505050),

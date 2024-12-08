@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:task_scheduler/presentation/ui/screens/guest_screens/guest_auth/guest_signup_screen.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_auth/host_signup_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/customised_elevated_button.dart';
@@ -32,7 +33,7 @@ class _HostGuestChoiceScreenState extends State<HostGuestChoiceScreen> {
               CustomisedElevatedButton(
                   onTap: () {
                     Get.to(
-                      () => const HostSignUpScreen(email: '',),
+                      () => const HostSignUpScreen(email: 'Host Email',),
                     );
                   },
                   text: 'Host'),
@@ -41,9 +42,9 @@ class _HostGuestChoiceScreenState extends State<HostGuestChoiceScreen> {
               ),
               CustomisedElevatedButton(
                   onTap: () {
-                   /* Get.to(
-                      () => const StuAvailabilityCheckScreen(),
-                    );*/
+                    Get.to(
+                      () => const GuestSignUpScreen(email: "Guest Email"),
+                    );
                   },
                   text: 'Guest'),
             ],
