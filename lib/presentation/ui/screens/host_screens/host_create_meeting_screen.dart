@@ -101,15 +101,14 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
       final int minute = pickedTime.minute;
 
       // Set the value in 24-hour time format (e.g., `HH:mm`)
-      String formattedTime = '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+      String formattedTime =
+          '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
 
       setState(() {
         controller.text = formattedTime;
       });
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -293,7 +292,7 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
                       _meetingController.clear();
 
                       if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Added successfully!', style: TextStyle(color: Colors.white)),
                           backgroundColor: Colors.green,
                         ));
@@ -301,7 +300,7 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
                     } else {
                       if (mounted) {
                         //print("API Response: $result");
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Added successfully!', style: TextStyle(color: Colors.white)),
                           backgroundColor: Colors.green,
                         ));
