@@ -14,16 +14,16 @@ class HostCreateMeetingScreen extends StatefulWidget {
 }
 
 class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
-  // Define controllers for text fields and date/time pickers
   final TextEditingController _topicTEController = TextEditingController();
   final TextEditingController _startDateController = TextEditingController();
   final TextEditingController _endDateController = TextEditingController();
   final TextEditingController _startTimeController = TextEditingController();
   final TextEditingController _endTimeController = TextEditingController();
 
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void dispose() {
-    // Dispose controllers to free resources
     _topicTEController.dispose();
     _startDateController.dispose();
     _endDateController.dispose();
@@ -32,45 +32,92 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
     super.dispose();
   }
 
-  // Function to handle time picking
+  Future<void> _selectDate(
+      BuildContext context, TextEditingController controller) async {
+    DateTime today = DateTime.now();
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: today,
+      firstDate: today,
+      lastDate: DateTime(2100),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Colors.teal,
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.teal,
+                textStyle: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        controller.text =  "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
+      });
+    }
+  }
+
   Future<void> _selectTime(
       BuildContext context, TextEditingController controller) async {
+
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
       builder: (BuildContext context, Widget? child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Colors.teal,
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.teal,
+                textStyle: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            timePickerTheme: TimePickerThemeData(
+              dialBackgroundColor: Colors.teal.shade100,
+              dialHandColor: Colors.teal,
+            ),
+          ),
           child: child!,
         );
       },
     );
 
     if (pickedTime != null) {
+      final int hour = pickedTime.hour;
+      final int minute = pickedTime.minute;
+
+      // Set the value in 24-hour time format (e.g., `HH:mm`)
+      String formattedTime = '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+
       setState(() {
-        controller.text = pickedTime.format(context); // Format time as 12-hour
+        controller.text = formattedTime;
       });
     }
   }
 
-  // Function to handle date picking
-  Future<void> _selectDate(
-      BuildContext context, TextEditingController controller) async {
-    DateTime today = DateTime.now();
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: today,
-      firstDate: today, // Prevent selection of past dates
-      lastDate: DateTime(2100),
-    );
 
-    if (pickedDate != null) {
-      setState(() {
-        controller.text = "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
-      });
-    }
-  }
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +129,6 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 20.h),
-              // Topic Input Field
               TextFormField(
                 controller: _topicTEController,
                 textInputAction: TextInputAction.next,
@@ -95,16 +141,12 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
                 },
               ),
               SizedBox(height: 40.h),
-
-              // Title for Date & Time
               Text(
                 "Date & Time",
                 style: TextStyle(fontSize: 25.sp, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 20.h),
-
-              // Start Date and Time Pickers
+              SizedBox(height: 40.h),
               Row(
                 children: [
                   Flexible(
@@ -139,15 +181,11 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
                 ],
               ),
               SizedBox(height: 30.h),
-
-              // "TO" Text
               Text(
                 "TO",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.sp),
               ),
               SizedBox(height: 30.h),
-
-              // End Date and Time Pickers
               Row(
                 children: [
                   Flexible(
@@ -187,22 +225,15 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
                 children: [
                   Text(
                     "Time Zone - ",
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "Fetch from api ",
-                    style: TextStyle(
-                        fontSize: 20.sp, fontWeight: FontWeight.bold),
+                    "Fetch from api",
+                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-          SizedBox(
-            height: 40.h,
-          ),
-              // Meeting Link or Address Field
+              SizedBox(height: 40.h),
               TextFormField(
                 textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(hintText: 'Meeting Link / Address'),
@@ -214,8 +245,6 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
                 },
               ),
               SizedBox(height: 40.h),
-
-              // Participants Info
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
