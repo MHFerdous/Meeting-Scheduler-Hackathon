@@ -9,6 +9,10 @@ import 'package:task_scheduler/presentation/ui/widgets/password_text_field.dart'
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 import 'package:task_scheduler/presentation/ui/widgets/title_and_subtitle.dart';
 
+import '../../../../../data/services/network_caller.dart';
+import '../../../../../data/utility/urls.dart';
+import '../../../../state_holders/auth_controller.dart';
+
 class GuestLogInScreen extends StatefulWidget {
   const GuestLogInScreen({super.key});
 
@@ -20,6 +24,7 @@ class _GuestLogInScreenState extends State<GuestLogInScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _passTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool inProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,34 +71,54 @@ class _GuestLogInScreenState extends State<GuestLogInScreen> {
                 ),
                 CustomisedElevatedButton(
                   onTap: () async {
-                    Get.to(
-                      () => const GuestEditProfileScreen(),
-                    );
+                    if (_formKey.currentState!.validate()) {
+                      inProgress = true;
+                      setState(() {});
+
+                      final result = await NetworkCaller().postMethod(
+                          Urls.guestLogin,
+                          body: {
+                            'email': _emailTEController.text.trim(),
+                            'password': _passTEController.text,
+                          });
+
+                      inProgress = false;
+                      setState(() {});
+                      if (result != null && result['status'] == 'success') {
+                        _emailTEController.clear();
+                        _passTEController.clear();
+
+                        await AuthController.saveUserData2(
+                            result['data']['email'],
+                            result['token']
+                        );
+
+
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Login Successful!',
+                                  style: TextStyle(color: Colors.white)),
+                                  backgroundColor: Colors.green));
+
+
+                          Navigator.pushAndRemoveUntil(context,
+                              MaterialPageRoute(
+                                  builder: (
+                                      context) => const GuestEditProfileScreen()), (
+                                  route) => false);
+                        }
+                      } else {
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Failed',
+                                  style: TextStyle(color: Colors.white)),
+                                  backgroundColor: Colors.red));
+                        }
+                      }
+                    }
                   },
                   text: 'LOG IN',
                 ),
-                /*GetBuilder<FacSignInController>(
-                  builder: (facLoginController) {
-                    if (facLoginController.facSignInInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.teal,
-                        ),
-                      );
-                    }
-                    return CustomisedElevatedButton(
-                      onTap: () async {
-                        if (_formKey.currentState!.validate()) {
-                          facSignIn(facLoginController);
-                        }
-                        // Get.to(
-                        //   () => const FacHomeScreen(),
-                        // );
-                      },
-                      text: 'SIGN IN',
-                    );
-                  },
-                ),*/
                 SizedBox(
                   height: 34.h,
                 ),
@@ -105,21 +130,4 @@ class _GuestLogInScreenState extends State<GuestLogInScreen> {
     );
   }
 
-/*  Future<void> facSignIn(FacSignInController facLoginController) async {
-    final result = await facLoginController.facSignIn(
-      _emailTEController.text.trim(),
-      */ /*('${_emailTEController.text.trim()}@lus.ac.bd'),*/ /*
-      _passTEController.text.trim(),
-    );
-
-    if (result) {
-      Get.snackbar('Successful!', facLoginController.message);
-      Get.offAll(
-            () => const FacMainBottomNavBarScreen(),
-      );
-    } else {
-      Get.snackbar('Failed!', facLoginController.message,
-          colorText: Colors.redAccent);
-    }
-  }*/
 }

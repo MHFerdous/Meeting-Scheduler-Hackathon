@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController {
-  static String? firstName, lastName, token, profilePic, mobile, email;
+  static String? firstName, lastName, token,token2, profilePic, mobile, email, email2;
 
   static Future<void> saveUserData(String uEmail, String uToken) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -11,6 +11,14 @@ class AuthController {
     await sharedPreferences.setString('email', uEmail);
     token = uToken;
     email = uEmail;
+  }
+
+  static Future<void> saveUserData2(String uEmail, String uToken) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setString('token', uToken);
+    await sharedPreferences.setString('email', uEmail);
+    token2 = uToken;
+    email2 = uEmail;
   }
 
   static Future<bool> checkLoginState() async {

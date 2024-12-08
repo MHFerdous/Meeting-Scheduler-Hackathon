@@ -5,6 +5,9 @@ import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/customised_elevated_button.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 
+import '../../../../data/services/network_caller.dart';
+import '../../../../data/utility/urls.dart';
+import '../../../state_holders/auth_controller.dart';
 import '../../widgets/appbar_method.dart';
 
 class GuestEditProfileScreen extends StatefulWidget {
@@ -15,12 +18,16 @@ class GuestEditProfileScreen extends StatefulWidget {
 }
 
 class _GuestEditProfileScreenState extends State<GuestEditProfileScreen> {
-  final TextEditingController _hostDesignation = TextEditingController();
+  final TextEditingController _guestFullName = TextEditingController();
+  final TextEditingController _guestDesignation = TextEditingController();
   final TextEditingController _companyName = TextEditingController();
   final TextEditingController _contactNumber = TextEditingController();
+  final TextEditingController _timezone = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  bool inProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,8 +39,10 @@ class _GuestEditProfileScreenState extends State<GuestEditProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [/**/
-                const SizedBox(height: 80,),
+              children: [
+                const SizedBox(
+                  height: 80,
+                ),
                 const AppLogo(),
                 SizedBox(
                   height: 30.h,
@@ -48,7 +57,42 @@ class _GuestEditProfileScreenState extends State<GuestEditProfileScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    IconButton(onPressed: (){}, icon: const Icon(Icons.edit),),
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Confirmation'),
+                                content: TextFormField(
+                                  controller: _guestFullName,
+                                  decoration: const InputDecoration(
+                                      hintText: 'Full Name'),
+                                ),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text(
+                                        'Cancel',
+                                        style: TextStyle(color: Colors.black),
+                                      )),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'Done',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            });
+                      },
+                      icon: const Icon(Icons.edit),
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -57,15 +101,10 @@ class _GuestEditProfileScreenState extends State<GuestEditProfileScreen> {
                 SizedBox(
                   width: 323.w,
                   child: TextFormField(
-                    controller: _hostDesignation,
+                    controller: _guestDesignation,
                     textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(hintText: 'Host Designation'),
-                    validator: (String? value) {
-                      if (value?.trim().isEmpty ?? true) {
-                        return 'Please enter your host designation';
-                      }
-                      return null;
-                    },
+                    decoration:
+                        const InputDecoration(hintText: 'Guest Designation'),
                   ),
                 ),
                 SizedBox(
@@ -77,36 +116,18 @@ class _GuestEditProfileScreenState extends State<GuestEditProfileScreen> {
                     controller: _companyName,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(hintText: 'Company Name'),
-                    validator: (String? value) {
-                      if (value?.trim().isEmpty ?? true) {
-                        return 'Please enter your Company name';
-                      }
-                      if (value!.isEmail == false) {
-                        return 'Enter a valid email';
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 SizedBox(
                   height: 12.h,
                 ),
-
                 SizedBox(
                   width: 323.w,
                   child: TextFormField(
                     controller: _contactNumber,
                     textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(hintText: 'Contact Number'),
-                    validator: (String? value) {
-                      if (value?.trim().isEmpty ?? true) {
-                        return 'Please enter your Company name';
-                      }
-                      if (value!.isEmail == false) {
-                        return 'Enter a valid email';
-                      }
-                      return null;
-                    },
+                    decoration:
+                        const InputDecoration(hintText: 'Contact Number'),
                   ),
                 ),
                 SizedBox(
@@ -115,18 +136,9 @@ class _GuestEditProfileScreenState extends State<GuestEditProfileScreen> {
                 SizedBox(
                   width: 323.w,
                   child: TextFormField(
-                    controller: _companyName,
+                    controller: _timezone,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(hintText: 'Time Zone'),
-                    validator: (String? value) {
-                      if (value?.trim().isEmpty ?? true) {
-                        return 'Please enter your number';
-                      }
-                      if (value!.isPhoneNumber == false) {
-                        return 'Enter a valid number';
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 SizedBox(
@@ -134,13 +146,53 @@ class _GuestEditProfileScreenState extends State<GuestEditProfileScreen> {
                 ),
                 CustomisedElevatedButton(
                   onTap: () async {
-                    Get.to(
-                      () => const GuestEditProfileScreen(),
-                    );
+                    if (_formKey.currentState!.validate()) {
+                      inProgress = true;
+                      setState(() {});
+
+                      final result = await NetworkCaller()
+                          .postMethod(Urls.guestProfile, body: {
+                        "email": AuthController.email2.toString(),
+                        "fullName": _guestFullName.text,
+                        "title": _guestDesignation.text,
+                        "companyName": _companyName.text,
+                        "mobile": _contactNumber.text,
+                        "timeZone": _timezone.text
+                      });
+
+                      inProgress = false;
+                      setState(() {});
+                      if (result != null && result['status'] == 'success') {
+                        _guestFullName.clear();
+                        _guestDesignation.clear();
+                        _contactNumber.clear();
+                        _companyName.clear();
+                        _timezone.clear();
+
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Profile Saved Successful!',
+                                      style: TextStyle(color: Colors.white)),
+                                  backgroundColor: Colors.green));
+                          // Navigator.pushAndRemoveUntil(context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => const HostLogInScreen()), (
+                          //         route) => false);
+                        }
+                      } else {
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Failed',
+                                      style: TextStyle(color: Colors.white)),
+                                  backgroundColor: Colors.red));
+                        }
+                      }
+                    }
                   },
-                  text: 'LOG IN',
+                  text: 'Save',
                 ),
-            
                 SizedBox(
                   height: 34.h,
                 ),
@@ -151,22 +203,4 @@ class _GuestEditProfileScreenState extends State<GuestEditProfileScreen> {
       ),
     );
   }
-
-/*  Future<void> facSignIn(FacSignInController facLoginController) async {
-    final result = await facLoginController.facSignIn(
-      _emailTEController.text.trim(),
-      */ /*('${_emailTEController.text.trim()}@lus.ac.bd'),*/ /*
-      _passTEController.text.trim(),
-    );
-
-    if (result) {
-      Get.snackbar('Successful!', facLoginController.message);
-      Get.offAll(
-            () => const FacMainBottomNavBarScreen(),
-      );
-    } else {
-      Get.snackbar('Failed!', facLoginController.message,
-          colorText: Colors.redAccent);
-    }
-  }*/
 }
