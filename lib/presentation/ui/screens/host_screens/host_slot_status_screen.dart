@@ -261,7 +261,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                       ),
                     ),
                     ListView.separated(
-                      itemCount: 10,
+                      itemCount: bookedUserModel.data!.length-1,
                       primary: false,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
@@ -287,7 +287,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                               ),
                             ),
                             title: Text(
-                              bookedUserModel.data?.guest?.fullName ?? '',
+                              bookedUserModel.data?[index+1].fullName ?? '',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.sp,

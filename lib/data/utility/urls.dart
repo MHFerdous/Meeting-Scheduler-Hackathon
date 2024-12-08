@@ -18,6 +18,6 @@ class Urls {
   static const String guestLogin = '$_guestBaseUrl/login';
   static const String guestProfile = '$_guestBaseUrl/profile';
 
-  static String bookedUserInfo(String email, String id) => '$_hostBaseUrl/bookschedule/$id/$email';
+  static String bookedUserInfo(String email, String id) => '$_guestBaseUrl/bookschedule/$id/$email';
 
 }

@@ -14,7 +14,7 @@ class NetworkCaller {
     try {
       final http.Response response = await http.get(Uri.parse(url), headers: {
         'Content-type': 'application/json',
-        'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM3MzEzNTgsImRhdGEiOiJzb2Z0ZW5naGFzYW4yNUBnbWFpbC5jb20iLCJpYXQiOjE3MzM2NDQ5NTh9.wLteudoqi7R5T2kg_9F2SV9nvxtcxr1a1Se_jpUXCFA'
+        'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM3Nzg1MzAsImRhdGEiOiJndWVzdEBnbWFpbC5jb20iLCJpYXQiOjE3MzM2OTIxMzB9.-8ySZnUF2qqTHWDI2uLkriZ6sO96Juu3VVDm_7QodqA'
       });
       log(response.body);
       if (response.statusCode == 200) {

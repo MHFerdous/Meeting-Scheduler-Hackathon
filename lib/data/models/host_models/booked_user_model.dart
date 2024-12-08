@@ -1,50 +1,30 @@
 class BookedUserModel {
   String? message;
-  Data? data;
+  List<Data>? data;
 
   BookedUserModel({this.message, this.data});
 
   BookedUserModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['message'] = message;
     if (this.data != null) {
-      data['data'] = this.data!.toJson();
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class Data {
-  Schedule? schedule;
-  Guest? guest;
-
-  Data({this.schedule, this.guest});
-
-  Data.fromJson(Map<String, dynamic> json) {
-    schedule = json['schedule'] != null
-        ? Schedule.fromJson(json['schedule'])
-        : null;
-    guest = json['guest'] != null ? Guest.fromJson(json['guest']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (schedule != null) {
-      data['schedule'] = schedule!.toJson();
-    }
-    if (guest != null) {
-      data['guest'] = guest!.toJson();
-    }
-    return data;
-  }
-}
-
-class Schedule {
   String? sId;
   String? hostEmail;
   String? hostFullName;
@@ -58,8 +38,14 @@ class Schedule {
   int? count;
   String? createdAt;
   int? iV;
+  String? email;
+  String? fullName;
+  String? companyName;
+  String? mobile;
+  String? timeZone;
+  String? createdDate;
 
-  Schedule(
+  Data(
       {this.sId,
         this.hostEmail,
         this.hostFullName,
@@ -72,9 +58,15 @@ class Schedule {
         this.status,
         this.count,
         this.createdAt,
-        this.iV});
+        this.iV,
+        this.email,
+        this.fullName,
+        this.companyName,
+        this.mobile,
+        this.timeZone,
+        this.createdDate});
 
-  Schedule.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     hostEmail = json['hostEmail'];
     hostFullName = json['hostFullName'];
@@ -88,6 +80,12 @@ class Schedule {
     count = json['count'];
     createdAt = json['createdAt'];
     iV = json['__v'];
+    email = json['email'];
+    fullName = json['fullName'];
+    companyName = json['companyName'];
+    mobile = json['mobile'];
+    timeZone = json['timeZone'];
+    createdDate = json['createdDate'];
   }
 
   Map<String, dynamic> toJson() {
@@ -105,47 +103,8 @@ class Schedule {
     data['count'] = count;
     data['createdAt'] = createdAt;
     data['__v'] = iV;
-    return data;
-  }
-}
-
-class Guest {
-  String? sId;
-  String? email;
-  String? fullName;
-  String? title;
-  String? companyName;
-  String? mobile;
-  String? timeZone;
-  String? createdDate;
-
-  Guest(
-      {this.sId,
-        this.email,
-        this.fullName,
-        this.title,
-        this.companyName,
-        this.mobile,
-        this.timeZone,
-        this.createdDate});
-
-  Guest.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    email = json['email'];
-    fullName = json['fullName'];
-    title = json['title'];
-    companyName = json['companyName'];
-    mobile = json['mobile'];
-    timeZone = json['timeZone'];
-    createdDate = json['createdDate'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
     data['email'] = email;
     data['fullName'] = fullName;
-    data['title'] = title;
     data['companyName'] = companyName;
     data['mobile'] = mobile;
     data['timeZone'] = timeZone;
