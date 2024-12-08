@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_scheduler/data/services/network_caller.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 
+import '../../../../data/utility/urls.dart';
 import '../../widgets/appbar_method.dart';
 import '../../widgets/customised_elevated_button.dart';
 
 class GuestApplySlots extends StatefulWidget {
-  const GuestApplySlots({super.key});
+  const GuestApplySlots({super.key, required this.topic, required this.startDate, required this.startTime, required this.endDate, required this.endTime, required this.meetingAddress, required this.remaining, required this.id});
+
+  final String topic;
+  final String startDate;
+  final String startTime;
+  final String endDate;
+  final String endTime;
+  final String meetingAddress;
+  final String remaining;
+  final String id;
+
 
   @override
   State<GuestApplySlots> createState() => _GuestApplySlotsState();
@@ -35,7 +47,7 @@ class _GuestApplySlotsState extends State<GuestApplySlots> {
                         fontSize: 24.sp, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    'Name',
+                    widget.topic,
                     style: TextStyle(
                         fontSize: 24.sp, fontWeight: FontWeight.bold),
                   ),
@@ -61,7 +73,7 @@ class _GuestApplySlotsState extends State<GuestApplySlots> {
                       child: Padding(
                         padding: EdgeInsets.all(16.w),
                         child: Text(
-                          'Start date',
+                          widget.startDate,
                           style: TextStyle(
                               fontSize: 20.sp, fontWeight: FontWeight.bold),
                         ),
@@ -78,7 +90,7 @@ class _GuestApplySlotsState extends State<GuestApplySlots> {
                       child: Padding(
                         padding: EdgeInsets.all(16.w),
                         child: Text(
-                          'Start time',
+                          widget.startTime,
                           style: TextStyle(
                               fontSize: 20.sp, fontWeight: FontWeight.bold),
                         ),
@@ -106,7 +118,7 @@ class _GuestApplySlotsState extends State<GuestApplySlots> {
                       child: Padding(
                         padding: EdgeInsets.all(16.w),
                         child: Text(
-                          'End date',
+                          widget.endDate,
                           style: TextStyle(
                               fontSize: 20.sp, fontWeight: FontWeight.bold),
                         ),
@@ -123,7 +135,7 @@ class _GuestApplySlotsState extends State<GuestApplySlots> {
                       child: Padding(
                         padding: EdgeInsets.all(16.w),
                         child: Text(
-                          'End time',
+                          widget.endTime,
                           style: TextStyle(
                               fontSize: 20.sp, fontWeight: FontWeight.bold),
                         ),
@@ -170,7 +182,7 @@ class _GuestApplySlotsState extends State<GuestApplySlots> {
                           fontSize: 20.sp, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "Fetch from api",
+                      widget.meetingAddress,
                       style: TextStyle(
                           fontSize: 20.sp, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.start,
@@ -197,15 +209,29 @@ class _GuestApplySlotsState extends State<GuestApplySlots> {
               ),
               SizedBox(height: 20.h),
               Text(
-                'Slot Remaining: 4',
+                'Slot Remaining: ${widget.remaining}',
                 style:
                 TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.start,
               ),
               SizedBox(height: 20.h),
               CustomisedElevatedButton(
-                  onTap: () {
-                    //book
+                  onTap: () async {
+
+                    final response = await NetworkCaller().getMethod(Urls.bookedUserInfo(_guestName.text, widget.id));
+                    if (response != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Book message sent', style: TextStyle(color: Colors.white)),
+                          backgroundColor: Colors.green));
+                      //availableHostModel = AvailableHostModel.fromJson(response);
+                    } else {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('Slot not available', style: TextStyle(color: Colors.white)),
+                            backgroundColor: Colors.red));
+                      }
+                    }
+
                   },
                   text: 'Book'),
             ],

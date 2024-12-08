@@ -10,6 +10,8 @@ import 'package:task_scheduler/presentation/ui/widgets/fac_drawer_method.dart';
 import 'package:task_scheduler/presentation/ui/widgets/homepage_card_elevated_button.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 
+import '../../../../data/models/guest_model/available_host_model.dart';
+import '../../../../data/models/host_models/booked_user_model.dart';
 import '../../../../data/models/host_models/most_booked_model.dart';
 
 class GuestHomeScreen extends StatefulWidget {
@@ -22,8 +24,8 @@ class GuestHomeScreen extends StatefulWidget {
 var _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _GuestHomeScreenState extends State<GuestHomeScreen> {
-
-  MostBookedModel mostBookedModel = MostBookedModel();
+  AvailableHostModel availableHostModel = AvailableHostModel();
+  BookedUserModel bookedUserModel = BookedUserModel();
   bool inProgress = false;
 
   final TextEditingController dateController = TextEditingController();
@@ -45,8 +47,10 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
 
     setState(() {
       filteredData = data.where((item) {
-        final matchesDate = selectedDate.isEmpty || item['date'] == selectedDate;
-        final matchesTime = selectedTime.isEmpty || item['time'] == selectedTime;
+        final matchesDate =
+            selectedDate.isEmpty || item['date'] == selectedDate;
+        final matchesTime =
+            selectedTime.isEmpty || item['time'] == selectedTime;
         final matchesHost =
             selectedHost.isEmpty || item['host'].toLowerCase() == selectedHost;
 
@@ -63,48 +67,48 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
           content: filteredData.isEmpty
               ? const Text('No data matches your criteria.')
               : SizedBox(
-            width: double.maxFinite,
-            height: 350.h,
-            child: ListView.separated(
-              itemCount: filteredData.length,
-              itemBuilder: (context, index) {
-                final item = filteredData[index];
-                return ListTile(
-                  title: Text(
-                    item['host'] ?? 'Unknown Host',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20.sp,
-                    ),
+                  width: double.maxFinite,
+                  height: 350.h,
+                  child: ListView.separated(
+                    itemCount: filteredData.length,
+                    itemBuilder: (context, index) {
+                      final item = filteredData[index];
+                      return ListTile(
+                        title: Text(
+                          item['host'] ?? 'Unknown Host',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20.sp,
+                          ),
+                        ),
+                        subtitle: Text(
+                          '${item['date']} at ${item['time']}',
+                          style: TextStyle(
+                            color: const Color(0xFF0D6858),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                        trailing: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.arrow_circle_right,
+                            size: 35.w,
+                          ),
+                          color: Colors.black,
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      );
+                    },
                   ),
-                  subtitle: Text(
-                    '${item['date']} at ${item['time']}',
-                    style: TextStyle(
-                      color: const Color(0xFF0D6858),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12.sp,
-                    ),
-                  ),
-                  trailing: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.arrow_circle_right,
-                      size: 35.w,
-                    ),
-                    color: Colors.black,
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return const Divider(
-                  thickness: 1,
-                  indent: 10,
-                  endIndent: 10,
-                );
-              },
-            ),
-          ),
+                ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -115,8 +119,6 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
       },
     );
   }
-
-
 
   Future<void> _selectDate(
       BuildContext context, TextEditingController controller) async {
@@ -151,14 +153,14 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
 
     if (pickedDate != null) {
       setState(() {
-        controller.text =  "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
+        controller.text =
+            "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
       });
     }
   }
 
   Future<void> _selectTime(
       BuildContext context, TextEditingController controller) async {
-
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -194,7 +196,8 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
       final int minute = pickedTime.minute;
 
       // Set the value in 24-hour time format (e.g., `HH:mm`)
-      String formattedTime = '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+      String formattedTime =
+          '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
 
       setState(() {
         controller.text = formattedTime;
@@ -207,20 +210,19 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
     super.initState();
     getMostBooked();
   }
+
   Future<void> getMostBooked() async {
     inProgress = true;
     setState(() {});
-    final response = await NetworkCaller()
-        .getMethod(Urls.hostMostBooked('host@yahoo.com'));
+    final response = await NetworkCaller().getMethod(Urls.guestSchedules);
 
     if (response != null) {
-      mostBookedModel = MostBookedModel.fromJson(response);
+      availableHostModel = AvailableHostModel.fromJson(response);
     } else {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed',
-                style: TextStyle(color: Colors.white)),
-                backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Failed', style: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.red));
       }
     }
     inProgress = false;
@@ -419,7 +421,8 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
                                     labelText: 'Select Date',
                                     suffixIcon: Icon(Icons.calendar_today),
                                   ),
-                                  onTap: () => _selectDate(context, dateController),
+                                  onTap: () =>
+                                      _selectDate(context, dateController),
                                 ),
                                 const SizedBox(height: 10),
 
@@ -431,7 +434,8 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
                                     labelText: 'Select Time',
                                     suffixIcon: Icon(Icons.access_time),
                                   ),
-                                  onTap: () => _selectTime(context, timeController),
+                                  onTap: () =>
+                                      _selectTime(context, timeController),
                                 ),
                                 const SizedBox(height: 10),
 
@@ -448,9 +452,48 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
                                 SizedBox(
                                   width: 100.w,
                                   child: ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      applyFilters();
+                                    onPressed: () async {
+                                        inProgress = true;
+                                        setState(() {});
+
+                                        final result = await NetworkCaller().postMethod(
+                                            Urls.guestSearch,
+                                            body: {
+                                              "date": dateController.text,
+                                              "time": timeController.text,
+                                              "hostName": "host"
+                                            });
+
+                                        inProgress = false;
+                                        setState(() {});
+                                        if (result != null && result['message'] == 'success') {
+                                          dateController.clear();
+                                          timeController.clear();
+                                          hostController.clear();
+
+                                          if (mounted) {
+                                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Found!', style: TextStyle(color: Colors.white)), backgroundColor: Colors.green));
+                                            showDialog(context: context, builder: (context){
+                                              return AlertDialog(
+                                                title: Text('Found'),
+                                                content: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    for (int i = 0; i < 100; i++)
+                                                       // Check if the index is even
+                                                         Text(bookedUserModel.data?[i+1].fullName.toString() ?? 'kkk'),
+
+                                                  ],
+                                                ),
+                                              );
+                                            });
+                                          }
+                                        } else {
+                                          if (mounted) {
+                                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed', style: TextStyle(color: Colors.white)), backgroundColor: Colors.red));
+
+                                          }
+                                        }
                                     },
                                     child: const Text('Filter'),
                                   ),
@@ -462,7 +505,6 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
                       );
                     },
                   ),
-
                 ],
               ),
             ),
@@ -482,14 +524,13 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
             height: 350.h,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(25.w),
-                color: const Color(0xFFFFFFFF)
-            ),
+                color: const Color(0xFFFFFFFF)),
             child: ListView.separated(
-              itemCount: mostBookedModel.data?.length ?? 0,
+              itemCount: availableHostModel.data?.length ?? 0,
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
-                    mostBookedModel.data?[index].title ?? 'Unknown',
+                    availableHostModel.data?[index].title ?? 'Unknown',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
@@ -497,7 +538,7 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
                     ),
                   ),
                   subtitle: Text(
-                    '${mostBookedModel.data?[index].startDate} (${mostBookedModel.data?[index].startTime}) To ${mostBookedModel.data?[index].endDate}  (${mostBookedModel.data?[index].endTime})',
+                    '${availableHostModel.data?[index].startDate} (${availableHostModel.data?[index].startTime}) To ${availableHostModel.data?[index].endDate}  (${availableHostModel.data?[index].endTime})',
                     style: TextStyle(
                       color: const Color(0xFF0D6858),
                       fontWeight: FontWeight.w500,
@@ -507,13 +548,27 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
                   trailing: IconButton(
                     onPressed: () {
                       Get.to(
-                        const GuestApplySlots()
+                        GuestApplySlots(
+                          topic: availableHostModel.data?[index].title ?? '',
+                          startDate:
+                              availableHostModel.data?[index].startDate ?? '',
+                          startTime:
+                              availableHostModel.data?[index].startTime ?? '',
+                          endDate: availableHostModel.data?[index].endDate ?? '',
+                          endTime: availableHostModel.data?[index].endTime ?? '',
+                          meetingAddress:
+                              availableHostModel.data?[index].meetingAddress ?? '',
+                          remaining:
+                              availableHostModel.data?[index].count.toString() ?? '',
+                          id:  availableHostModel.data?[index].sId ?? '',
+                        ),
                       );
                     },
                     icon: Icon(
                       Icons.arrow_circle_right,
                       size: 35.w,
-                    ), color: Colors.teal,
+                    ),
+                    color: Colors.teal,
                   ),
                 );
               },
