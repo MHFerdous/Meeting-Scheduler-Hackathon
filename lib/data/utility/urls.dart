@@ -8,6 +8,9 @@ class Urls {
   static const String hostProfile = '$_hostBaseUrl/profile';
   static String hostMostBooked(String email) => '$_hostBaseUrl/mostBooked/$email';
   static String hostCreateSchedule = '$_hostBaseUrl/createschedule';
+  static String hostEditSchedule(String id) => '$_hostBaseUrl/edit/$id';
+  static String hostDeleteSchedule(String email, String id) => '$_hostBaseUrl/delete/$email/$id';
+  static String hostTotalMeeting(String email, String date) => '$_hostBaseUrl/meetings/today/$email/$date';
 
   /// guest
   static const String guestRegistration = '$_guestBaseUrl/registration';
