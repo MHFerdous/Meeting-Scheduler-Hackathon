@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:task_scheduler/presentation/ui/widgets/host_nav.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_create_meeting_screen.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_slot_status_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/appbar_method.dart';
@@ -204,7 +205,11 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                     height: 75.h,
                     text: 'Analytics',
                     color: 0xFFCBD0F9,
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(
+                        () => const HostNav(),
+                      );
+                    },
                   ),
                 ],
               ),
