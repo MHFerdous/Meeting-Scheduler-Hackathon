@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:task_scheduler/presentation/ui/screens/host_screens/host_home_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/customised_elevated_button.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
@@ -135,7 +136,7 @@ class _HostEditProfileScreenState extends State<HostEditProfileScreen> {
                 CustomisedElevatedButton(
                   onTap: () async {
                     Get.to(
-                      () => const HostEditProfileScreen(),
+                      () => const HostHomeScreen(),
                     );
                   },
                   text: 'LOG IN',
