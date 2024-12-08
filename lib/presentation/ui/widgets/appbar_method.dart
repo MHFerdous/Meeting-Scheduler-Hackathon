@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:task_scheduler/presentation/state_holders/auth_controller.dart';
 import '../screens/main_screen.dart';
 import 'app_logo.dart';
 
@@ -19,7 +20,7 @@ AppBar customisedAppBar( GlobalKey<ScaffoldState> scaffoldKey,
     ),
     title: Text(
       //appBarAuth.toString(),
-      "Host Email",
+      AuthController.email?.toString() ?? '',
       style: TextStyle(
         fontSize: 16.h,
         fontWeight: FontWeight.w500,
@@ -55,9 +56,9 @@ AppBar customisedAppBar( GlobalKey<ScaffoldState> scaffoldKey,
                           color: Colors.green),
                     ),
                   ),
-                  /*TextButton(
+                  TextButton(
                     onPressed: () {
-                      AuthController.facAuthClear();
+                      AuthController.checkLoginState();
                     },
                     child: Text(
                       "YES",
@@ -66,7 +67,7 @@ AppBar customisedAppBar( GlobalKey<ScaffoldState> scaffoldKey,
                           fontWeight: FontWeight.w500,
                           color: Colors.red),
                     ),
-                  ),*/
+                  ),
                 ],
               );
             },
