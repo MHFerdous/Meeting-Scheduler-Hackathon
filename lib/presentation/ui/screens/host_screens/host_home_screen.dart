@@ -5,6 +5,7 @@ import 'package:task_scheduler/data/services/network_caller.dart';
 import 'package:task_scheduler/data/utility/urls.dart';
 import 'package:task_scheduler/presentation/state_holders/auth_controller.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_create_meeting_screen.dart';
+import 'package:task_scheduler/presentation/ui/screens/host_screens/host_slot_status_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/appbar_method.dart';
 import 'package:task_scheduler/presentation/ui/widgets/fac_drawer_method.dart';
 import 'package:task_scheduler/presentation/ui/widgets/homepage_card_elevated_button.dart';
@@ -347,7 +348,11 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                     height: 75.h,
                     text: 'Analytics',
                     color: 0xFFCBD0F9,
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(
+                        () => const HostNav(),
+                      );
+                    },
                   ),
                 ],
               ),
