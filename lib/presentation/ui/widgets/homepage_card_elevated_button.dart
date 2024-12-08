@@ -30,7 +30,7 @@ class CardElevatedButton extends StatelessWidget {
           text,
           style: TextStyle(
             fontSize: 24.sp,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),

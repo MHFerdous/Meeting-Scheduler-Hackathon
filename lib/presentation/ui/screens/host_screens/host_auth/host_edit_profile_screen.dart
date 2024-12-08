@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:task_scheduler/presentation/ui/screens/host_screens/host_home_screen.dart';
 import 'package:task_scheduler/presentation/state_holders/auth_controller.dart';
 import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/customised_elevated_button.dart';
