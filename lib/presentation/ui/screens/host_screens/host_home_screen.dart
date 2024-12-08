@@ -99,7 +99,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                                     Text(
                                       "Meeting",
                                       style: TextStyle(
-                                          fontSize: 16.sp,
+                                          fontSize: 15.sp,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black),
                                     )
@@ -108,7 +108,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                               ),
                             ),
                             SizedBox(
-                              width: 26.w,
+                              width: 50.w,
                             ),
                             ClipOval(
                               child: Container(
@@ -128,7 +128,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                                     Text(
                                       "Pending",
                                       style: TextStyle(
-                                          fontSize: 16.sp,
+                                          fontSize: 15.sp,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black),
                                     )
@@ -178,11 +178,11 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 84.h,
+                    height: 20.h,
                   ),
                   CardElevatedButton(
                     width: 355.w,
-                    height: 102.h,
+                    height: 75.h,
                     text: 'Create Slots',
                     color: 0xFFF8FFAC,
                     onTap: () {
@@ -192,21 +192,15 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                     },
                   ),
                   SizedBox(
-                    height: 80.h,
+                    height: 20.h,
                   ),
-                  CardElevatedButton(
-                    width: 142.w,
-                    height: 102.h,
-                    text: 'Slot List',
-                    color: 0xFFFFE8D2,
-                    onTap: () {},
-                  ),
+                  showTable(),
                   SizedBox(
-                    height: 51.h,
+                    height: 23.h,
                   ),
                   CardElevatedButton(
                     width: 355.w,
-                    height: 102.h,
+                    height: 75.h,
                     text: 'Analytics',
                     color: 0xFFCBD0F9,
                     onTap: () {},
@@ -216,6 +210,61 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget showTable() {
+    return Padding(
+      padding: EdgeInsets.only(left: 3.0.w),
+      child: Stack(
+        children: [
+          Container(
+            width: 360.w,
+            height: 350.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25.w),
+                color: const Color(0xFFFFFFFF)
+            ),
+            child: ListView.separated(
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(
+                    'Topic Name',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 20.sp,
+                    ),
+                  ),
+                  subtitle: Text(
+                    '02-02-24 ( 11.00 AM ) To 02-02-21  ( 12.00 ) PM',
+                    style: TextStyle(
+                      color: const Color(0xFF0D6858),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12.sp,
+                    ),
+                  ),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.arrow_circle_right,
+                      size: 35.w,
+                    ), color: Colors.teal,
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const Divider(
+                  thickness: 1,
+                  indent: 10,
+                  endIndent: 10,
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
