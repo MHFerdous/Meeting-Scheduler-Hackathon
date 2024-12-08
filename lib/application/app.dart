@@ -26,7 +26,7 @@ class MeetingSchedulerState extends State<MeetingScheduler> {
       builder: (context, child) => GetMaterialApp(
         useInheritedMediaQuery: true,
         navigatorKey: MeetingScheduler.globalKey,
-        home: const GuestHomeScreen(),
+        home: const HostHomeScreen(),
         initialBinding: GetXBindings(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
