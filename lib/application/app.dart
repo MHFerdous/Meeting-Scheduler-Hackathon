@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:task_scheduler/presentation/ui/screens/guest_screens/guest_auth/guest_login_screen.dart';
-import 'package:task_scheduler/presentation/ui/screens/guest_screens/guest_auth/guest_signup_screen.dart';
-import 'package:task_scheduler/presentation/ui/screens/guest_screens/guest_edit_profile_screen.dart';
-import 'package:task_scheduler/presentation/ui/screens/host_screens/host_auth/host_edit_profile_screen.dart';
-import 'package:task_scheduler/presentation/ui/screens/host_screens/host_auth/host_login_screen.dart';
-import 'package:task_scheduler/presentation/ui/screens/main_screen.dart';
+import 'package:task_scheduler/presentation/ui/screens/host_screens/host_create_meeting_screen.dart';
+import 'package:task_scheduler/presentation/ui/screens/host_screens/host_home_screen.dart';
+
 import 'package:task_scheduler/presentation/ui/utility/app_colors.dart';
 
 import 'controller_binders.dart';
@@ -28,7 +25,7 @@ class MeetingSchedulerState extends State<MeetingScheduler> {
       builder: (context, child) => GetMaterialApp(
         useInheritedMediaQuery: true,
         navigatorKey: MeetingScheduler.globalKey,
-        home: GuestLogInScreen(),
+        home: const HostCreateMeetingScreen(),
         initialBinding: GetXBindings(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

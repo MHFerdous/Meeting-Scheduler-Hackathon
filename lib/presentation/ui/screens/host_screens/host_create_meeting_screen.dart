@@ -22,16 +22,6 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  void dispose() {
-    _topicTEController.dispose();
-    _startDateController.dispose();
-    _endDateController.dispose();
-    _startTimeController.dispose();
-    _endTimeController.dispose();
-    super.dispose();
-  }
-
   Future<void> _selectDate(
       BuildContext context, TextEditingController controller) async {
     DateTime today = DateTime.now();
@@ -278,4 +268,15 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _topicTEController.dispose();
+    _startDateController.dispose();
+    _endDateController.dispose();
+    _startTimeController.dispose();
+    _endTimeController.dispose();
+    super.dispose();
+  }
+
 }

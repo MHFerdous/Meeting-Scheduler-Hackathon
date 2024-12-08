@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:task_scheduler/data/services/network_caller.dart';
+import 'package:task_scheduler/data/utility/urls.dart';
+import 'package:task_scheduler/presentation/state_holders/auth_controller.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_create_meeting_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/appbar_method.dart';
 import 'package:task_scheduler/presentation/ui/widgets/fac_drawer_method.dart';
 import 'package:task_scheduler/presentation/ui/widgets/homepage_card_elevated_button.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
+
+import '../../../../data/models/host_models/most_booked_model.dart';
 
 class HostHomeScreen extends StatefulWidget {
   const HostHomeScreen({super.key});
@@ -17,6 +22,36 @@ class HostHomeScreen extends StatefulWidget {
 var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _HostHomeScreenState extends State<HostHomeScreen> {
+
+  MostBookedModel mostBookedModel = MostBookedModel();
+  bool inProgress = false;
+
+
+  @override
+  void initState() {
+    super.initState();
+    getMostBooked();
+  }
+  Future<void> getMostBooked() async {
+    inProgress = true;
+    setState(() {});
+    final response = await NetworkCaller()
+        .getMethod(Urls.hostMostBooked('host@yahoo.com'));
+
+    if (response != null) {
+      mostBookedModel = MostBookedModel.fromJson(response);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed',
+                style: TextStyle(color: Colors.white)),
+                backgroundColor: Colors.red));
+      }
+    }
+    inProgress = false;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -227,11 +262,11 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                 color: const Color(0xFFFFFFFF)
             ),
             child: ListView.separated(
-              itemCount: 5,
+              itemCount: mostBookedModel.data?.length ?? 0,
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
-                    'Topic Name',
+                    mostBookedModel.data?[index].title ?? 'Unknown',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
@@ -239,7 +274,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                     ),
                   ),
                   subtitle: Text(
-                    '02-02-24 ( 11.00 AM ) To 02-02-21  ( 12.00 ) PM',
+                    '${mostBookedModel.data?[index].startDate} (${mostBookedModel.data?[index].startTime}) To ${mostBookedModel.data?[index].endDate}  (${mostBookedModel.data?[index].endTime})',
                     style: TextStyle(
                       color: const Color(0xFF0D6858),
                       fontWeight: FontWeight.w500,

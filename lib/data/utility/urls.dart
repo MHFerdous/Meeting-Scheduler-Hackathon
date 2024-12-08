@@ -6,6 +6,8 @@ class Urls {
   static const String hostRegistration = '$_hostBaseUrl/registration';
   static const String hostLogin = '$_hostBaseUrl/login';
   static const String hostProfile = '$_hostBaseUrl/profile';
+  static String hostMostBooked(String email) => '$_hostBaseUrl/mostBooked/$email';
+  static String hostCreateSchedule = '$_hostBaseUrl/createschedule';
 
   /// guest
   static const String guestRegistration = '$_guestBaseUrl/registration';

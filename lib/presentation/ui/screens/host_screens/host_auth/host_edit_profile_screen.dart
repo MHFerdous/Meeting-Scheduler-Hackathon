@@ -161,10 +161,10 @@ class _HostEditProfileScreenState extends State<HostEditProfileScreen> {
 
                         if (mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Profile Saved Successful!', style: TextStyle(color: Colors.white)), backgroundColor: Colors.green));
-                          // Navigator.pushAndRemoveUntil(context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const HostLogInScreen()), (
-                          //         route) => false);
+                          Navigator.pushAndRemoveUntil(context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HostHomeScreen()), (
+                                  route) => false);
                         }
                       } else {
                         if (mounted) {
