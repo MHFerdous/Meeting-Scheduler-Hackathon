@@ -5,7 +5,15 @@ import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 import '../../widgets/appbar_method.dart';
 
 class HostSlotStatusScreen extends StatefulWidget {
-  const HostSlotStatusScreen({super.key});
+  const HostSlotStatusScreen({super.key, required this.topic, required this.startDate, required this.startTime, required this.endDate, required this.endTime, required this.meetingAddress, required this.remaining});
+  final String topic;
+  final String startDate;
+  final String startTime;
+  final String endDate;
+  final String endTime;
+  final String meetingAddress;
+  final String remaining;
+
 
   @override
   State<HostSlotStatusScreen> createState() => _HostSlotStatusScreenState();
@@ -35,7 +43,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                           fontSize: 24.sp, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'Backu theke topic aibo',
+                      widget.topic,
                       style: TextStyle(
                           fontSize: 24.sp, fontWeight: FontWeight.bold),
                     ),
@@ -61,7 +69,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(16.w),
                           child: Text(
-                            'Start date',
+                            widget.startDate,
                             style: TextStyle(
                                 fontSize: 20.sp, fontWeight: FontWeight.bold),
                           ),
@@ -78,7 +86,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(16.w),
                           child: Text(
-                            'Start time',
+                            widget.startTime,
                             style: TextStyle(
                                 fontSize: 20.sp, fontWeight: FontWeight.bold),
                           ),
@@ -106,7 +114,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(16.w),
                           child: Text(
-                            'End date',
+                            widget.endDate,
                             style: TextStyle(
                                 fontSize: 20.sp, fontWeight: FontWeight.bold),
                           ),
@@ -123,7 +131,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(16.w),
                           child: Text(
-                            'End time',
+                            widget.endTime,
                             style: TextStyle(
                                 fontSize: 20.sp, fontWeight: FontWeight.bold),
                           ),
@@ -156,7 +164,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: 20.w),
                   child: Text(
-                    'Meeting Address: ono backu taki address or link aibo',
+                    'Meeting Address: ${widget.meetingAddress}',
                     style:
                         TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.start,
@@ -204,7 +212,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                 ),
                 SizedBox(height: 40.h),
                 Text(
-                  'Slot Remaining: backu taki aibo',
+                  'Slot Remaining: ${widget.remaining}',
                   style:
                       TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.start,

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:task_scheduler/data/services/network_caller.dart';
 import 'package:task_scheduler/data/utility/urls.dart';
+import 'package:task_scheduler/presentation/ui/screens/guest_screens/guest_apply_slots.dart';
 import 'package:task_scheduler/presentation/ui/widgets/appbar_method.dart';
 import 'package:task_scheduler/presentation/ui/widgets/fac_drawer_method.dart';
 import 'package:task_scheduler/presentation/ui/widgets/homepage_card_elevated_button.dart';
@@ -502,7 +505,11 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
                     ),
                   ),
                   trailing: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(
+                        const GuestApplySlots()
+                      );
+                    },
                     icon: Icon(
                       Icons.arrow_circle_right,
                       size: 35.w,

@@ -7,6 +7,7 @@ class Urls {
   static const String hostLogin = '$_hostBaseUrl/login';
   static const String hostProfile = '$_hostBaseUrl/profile';
   static String hostMostBooked(String email) => '$_hostBaseUrl/mostBooked/$email';
+  static String hostPopularBooked(String email) => '$_hostBaseUrl/popularBookingTime/$email';
   static String hostCreateSchedule = '$_hostBaseUrl/createschedule';
   static String hostEditSchedule(String id) => '$_hostBaseUrl/edit/$id';
   static String hostDeleteSchedule(String email, String id) => '$_hostBaseUrl/delete/$email/$id';

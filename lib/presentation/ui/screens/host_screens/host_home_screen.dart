@@ -3,17 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:task_scheduler/data/services/network_caller.dart';
 import 'package:task_scheduler/data/utility/urls.dart';
-import 'package:task_scheduler/presentation/state_holders/auth_controller.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_create_meeting_screen.dart';
-import 'package:task_scheduler/presentation/ui/screens/host_screens/host_slot_status_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/appbar_method.dart';
 import 'package:task_scheduler/presentation/ui/widgets/fac_drawer_method.dart';
 import 'package:task_scheduler/presentation/ui/widgets/homepage_card_elevated_button.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
-
 import '../../../../data/models/host_models/most_booked_model.dart';
 import '../../../../data/models/host_models/todays_total_model.dart';
-import '../../widgets/customised_elevated_button.dart';
+import '../../widgets/host_nav.dart';
+import 'host_slot_status_screen.dart';
 
 class HostHomeScreen extends StatefulWidget {
   const HostHomeScreen({super.key});
@@ -35,7 +33,8 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
   final TextEditingController _meetingController = TextEditingController();
   bool inProgress = false;
 
-  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+  Future<void> _selectDate(
+      BuildContext context, TextEditingController controller) async {
     DateTime today = DateTime.now();
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -72,7 +71,9 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
       });
     }
   }
-  Future<void> _selectTime(BuildContext context, TextEditingController controller) async {
+
+  Future<void> _selectTime(
+      BuildContext context, TextEditingController controller) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -124,11 +125,11 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
     getTotal();
   }
 
-  Future<void> getTotal() async{
+  Future<void> getTotal() async {
     inProgress = true;
     setState(() {});
-    final response =
-    await NetworkCaller().getMethod(Urls.hostTotalMeeting('host@yahoo.com','2024-12-09'));
+    final response = await NetworkCaller()
+        .getMethod(Urls.hostTotalMeeting('host@yahoo.com', '2024-12-09'));
 
     if (response != null) {
       todayTotalModel = TodayTotalModel.fromJson(response);
@@ -378,19 +379,39 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
               itemCount: mostBookedModel.data?.length ?? 0,
               itemBuilder: (context, index) {
                 return InkWell(
+                  onTap: () {
+                    Get.to(
+                      HostSlotStatusScreen(
+                        topic: mostBookedModel.data![index].title.toString(),
+                        startDate:
+                            mostBookedModel.data![index].startDate.toString(),
+                        startTime:
+                            mostBookedModel.data![index].startTime.toString(),
+                        endDate:
+                            mostBookedModel.data![index].endDate.toString(),
+                        endTime:
+                            mostBookedModel.data![index].endTime.toString(),
+                        meetingAddress: mostBookedModel
+                            .data![index].meetingAddress
+                            .toString(),
+                        remaining:
+                            mostBookedModel.data![index].count.toString(),
+                      ),
+                    );
+                  },
                   onLongPress: () {
                     showDialog(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text('Do you want to edit or delete?'),
-                            content: Text('Are you sure?'),
+                            title: const Text('Do you want to edit or delete?'),
+                            content: const Text('Are you sure?'),
                             actions: [
                               TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text('Cancel',
+                                  child: const Text('Cancel',
                                       style: TextStyle(color: Colors.black))),
                               TextButton(
                                   onPressed: () {
@@ -687,10 +708,12 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                                                           (route) => false);
                                                     }
                                                   }
-                                                  Navigator.pushAndRemoveUntil(context,
+                                                  Navigator.pushAndRemoveUntil(
+                                                      context,
                                                       MaterialPageRoute(
-                                                          builder: (context) => const HostHomeScreen()), (
-                                                          route) => false);
+                                                          builder: (context) =>
+                                                              const HostHomeScreen()),
+                                                      (route) => false);
                                                 },
                                                 child: const Text(
                                                   'Done',
@@ -708,12 +731,15 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                                   onPressed: () async {
                                     inProgress = true;
                                     setState(() {});
-                                    await NetworkCaller().getMethod(Urls.hostDeleteSchedule('host@yahoo.com', mostBookedModel.data![index].sId.toString()));
+                                    await NetworkCaller().getMethod(
+                                        Urls.hostDeleteSchedule(
+                                            'host@yahoo.com',
+                                            mostBookedModel.data![index].sId
+                                                .toString()));
                                     //await NetworkCaller().deleteMethod(Urls.hostDeleteSchedule(AuthController.email.toString(), mostBookedModel.data![index].sId.toString()));
                                     inProgress = false;
                                     setState(() {});
                                     getMostBooked();
-
                                   },
                                   child: const Text('Delete',
                                       style: TextStyle(color: Colors.black))),
