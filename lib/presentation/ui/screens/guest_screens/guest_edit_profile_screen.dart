@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/customised_elevated_button.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
@@ -9,6 +8,7 @@ import '../../../../data/services/network_caller.dart';
 import '../../../../data/utility/urls.dart';
 import '../../../state_holders/auth_controller.dart';
 import '../../widgets/appbar_method.dart';
+import 'guest_home_screen.dart';
 
 class GuestEditProfileScreen extends StatefulWidget {
   const GuestEditProfileScreen({super.key});
@@ -175,10 +175,10 @@ class _GuestEditProfileScreenState extends State<GuestEditProfileScreen> {
                                   content: Text('Profile Saved Successful!',
                                       style: TextStyle(color: Colors.white)),
                                   backgroundColor: Colors.green));
-                          // Navigator.pushAndRemoveUntil(context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const HostLogInScreen()), (
-                          //         route) => false);
+                          Navigator.pushAndRemoveUntil(context,
+                              MaterialPageRoute(
+                                  builder: (context) => const GuestHomeScreen()), (
+                                  route) => false);
                         }
                       } else {
                         if (mounted) {

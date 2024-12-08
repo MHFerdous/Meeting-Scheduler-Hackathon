@@ -7,6 +7,7 @@ import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/customised_elevated_button.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 
+
 class HostGuestChoiceScreen extends StatefulWidget {
   const HostGuestChoiceScreen({super.key});
 
