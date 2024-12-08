@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_auth/host_login_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
-import 'package:task_scheduler/presentation/ui/widgets/text_fields.dart';
 import 'package:task_scheduler/presentation/ui/widgets/title_and_subtitle.dart';
 import '../../../widgets/new_confirm_password_text_field.dart';
 import '../../../widgets/customised_elevated_button.dart';

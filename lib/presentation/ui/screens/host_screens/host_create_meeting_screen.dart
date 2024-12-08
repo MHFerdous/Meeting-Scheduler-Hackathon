@@ -65,14 +65,14 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
 
     if (pickedDate != null) {
       setState(() {
-        controller.text =  "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
+        controller.text =
+            "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
       });
     }
   }
 
   Future<void> _selectTime(
       BuildContext context, TextEditingController controller) async {
-
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -108,15 +108,14 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
       final int minute = pickedTime.minute;
 
       // Set the value in 24-hour time format (e.g., `HH:mm`)
-      String formattedTime = '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+      String formattedTime =
+          '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
 
       setState(() {
         controller.text = formattedTime;
       });
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -225,18 +224,21 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
                 children: [
                   Text(
                     "Time Zone - ",
-                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     "Fetch from api",
-                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
               SizedBox(height: 40.h),
               TextFormField(
                 textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(hintText: 'Meeting Link / Address'),
+                decoration:
+                    const InputDecoration(hintText: 'Meeting Link / Address'),
                 validator: (String? value) {
                   if (value?.trim().isEmpty ?? true) {
                     return 'Please enter your Meeting Link / Address';
@@ -250,7 +252,8 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
                 children: [
                   Text(
                     "Participants - ",
-                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
                   ),
                   Card(
                     elevation: 4,
@@ -261,7 +264,8 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
                       padding: EdgeInsets.all(8.w),
                       child: Text(
                         "10",
-                        style: TextStyle(fontSize: 25.sp, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 25.sp, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),

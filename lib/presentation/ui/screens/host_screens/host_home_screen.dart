@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_create_meeting_screen.dart';
+import 'package:task_scheduler/presentation/ui/screens/host_screens/host_slot_status_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/appbar_method.dart';
 import 'package:task_scheduler/presentation/ui/widgets/fac_drawer_method.dart';
 import 'package:task_scheduler/presentation/ui/widgets/homepage_card_elevated_button.dart';
@@ -223,9 +224,8 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
             width: 360.w,
             height: 350.h,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25.w),
-                color: const Color(0xFFFFFFFF)
-            ),
+                borderRadius: BorderRadius.circular(25.w),
+                color: const Color(0xFFFFFFFF)),
             child: ListView.separated(
               itemCount: 5,
               itemBuilder: (context, index) {
@@ -247,11 +247,16 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                     ),
                   ),
                   trailing: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(
+                        () => const HostSlotStatusScreen(),
+                      );
+                    },
                     icon: Icon(
                       Icons.arrow_circle_right,
                       size: 35.w,
-                    ), color: Colors.teal,
+                    ),
+                    color: Colors.teal,
                   ),
                 );
               },
