@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 
+import '../../../../data/models/host_models/booked_user_model.dart';
+import '../../../../data/services/network_caller.dart';
+import '../../../../data/utility/urls.dart';
 import '../../widgets/appbar_method.dart';
 
 class HostSlotStatusScreen extends StatefulWidget {
-  const HostSlotStatusScreen({super.key, required this.topic, required this.startDate, required this.startTime, required this.endDate, required this.endTime, required this.meetingAddress, required this.remaining});
+  const HostSlotStatusScreen({super.key, required this.topic, required this.startDate, required this.startTime, required this.endDate, required this.endTime, required this.meetingAddress, required this.remaining, required this.id});
   final String topic;
   final String startDate;
   final String startTime;
@@ -13,6 +16,7 @@ class HostSlotStatusScreen extends StatefulWidget {
   final String endTime;
   final String meetingAddress;
   final String remaining;
+  final String id;
 
 
   @override
@@ -21,6 +25,33 @@ class HostSlotStatusScreen extends StatefulWidget {
 
 class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  BookedUserModel bookedUserModel = BookedUserModel();
+  bool inProgress = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getBookedUser();
+  }
+
+  Future<void> getBookedUser() async {
+    inProgress = true;
+    setState(() {});
+    final response =
+    await NetworkCaller().getMethod(Urls.bookedUserInfo('kk@gmail.com', widget.id));
+
+    if (response != null) {
+      bookedUserModel = BookedUserModel.fromJson(response);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Failed', style: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.red));
+      }
+    }
+    inProgress = false;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -256,7 +287,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                               ),
                             ),
                             title: Text(
-                              'Guest name form backu',
+                              bookedUserModel.data?.guest?.fullName ?? '',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.sp,

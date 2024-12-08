@@ -396,6 +396,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                             .toString(),
                         remaining:
                             mostBookedModel.data![index].count.toString(),
+                        id: mostBookedModel.data![index].sId.toString(),
                       ),
                     );
                   },

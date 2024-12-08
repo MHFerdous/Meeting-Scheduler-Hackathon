@@ -85,6 +85,7 @@ class _HostMostBookedAnalyticsScreenState
                               .toString(),
                           remaining:
                               mostBookedModel.data![index].count.toString(),
+                          id: mostBookedModel.data![index].sId.toString(),
                         ),
                       );
                     },
