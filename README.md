@@ -1,1 +1,1 @@
-# Task-Scheduler-Hackathon
+# Meeting-Scheduler-Hackathon
