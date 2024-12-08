@@ -1,119 +1,59 @@
-import 'package:get/get.dart';
+import 'dart:typed_data';
+
 import 'package:shared_preferences/shared_preferences.dart';
-/// don't touch this file, solved file
 
 class AuthController {
-  static String? accessToken,
-      email0,
-      fullName0,
-      designation0,
-      department0,
-      countt;
+  static String? firstName, lastName, token, profilePic, mobile, email;
 
-  static String? accessToken1,
-      email1,
-      fullName1,
-      studentId1,
-      department1,
-      count1,
-      batch1,
-      section1;
-
-  static Future<void> setProfileDetails(String token, String email1,
-      String fullName1, String designation1, String department1, String count,
-      [String? batch, String? section]) async {
-    final SharedPreferences sharedPreferences =
-    await SharedPreferences.getInstance();
-    await sharedPreferences.setString('token', token);
-    await sharedPreferences.setString('email', email1);
-    await sharedPreferences.setString('fullName', fullName1);
-    await sharedPreferences.setString('designation', designation1);
-    await sharedPreferences.setString('department', department1);
-    await sharedPreferences.setString('count', count);
-    accessToken = token;
-    email0 = email1;
-    fullName0 = fullName1;
-    designation0 = designation1;
-    department0 = designation1;
-    countt = count;
+  /// Save user authentication (information)
+  static Future<void> saveUserData(String uFirstName, String uLastName,
+      String uToken, String uProfilePic, String uMobile, String uEmail) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setString('token', uToken);
+    await sharedPreferences.setString('firstName', uFirstName);
+    await sharedPreferences.setString('lastName', uLastName);
+    await sharedPreferences.setString('mobile', uMobile);
+    await sharedPreferences.setString('photo', uProfilePic);
+    await sharedPreferences.setString('email', uEmail);
+    firstName = uFirstName;
+    lastName = uLastName;
+    token = uToken;
+    profilePic = uProfilePic;
+    mobile = uMobile;
+    email = uEmail;
   }
 
-  static Future<void> setStudentProfileDetails(String token, String email2,
-      String fullName2, String studentId2, String department2, String count2,
-      [String? batch, String? section]) async {
-    final SharedPreferences sharedPreferences =
-    await SharedPreferences.getInstance();
-    await sharedPreferences.setString('token', token);
-    await sharedPreferences.setString('email', email2);
-    await sharedPreferences.setString('fullName', fullName2);
-    await sharedPreferences.setString('studentId', studentId2);
-    await sharedPreferences.setString('department', department2);
-    await sharedPreferences.setString('batch', batch!);
-    await sharedPreferences.setString('section', section!);
-    await sharedPreferences.setString('count', count2);
-    accessToken1 = token;
-    email1 = email2;
-    fullName1 = fullName2;
-    studentId1 = studentId2;
-    department1 = department2;
-    batch1 = batch;
-    section1 = section;
-    count1 = count2;
-  }
-
+  /// this is check function for really saved the user information or not (T/F)
   static Future<bool> checkLoginState() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    accessToken = sharedPreferences.getString('token');
-    email0 = sharedPreferences.getString('email');
-    fullName0 = sharedPreferences.getString('fullName');
-    designation0 = sharedPreferences.getString('designation');
-    department0 = sharedPreferences.getString('department');
-    countt = sharedPreferences.getString('count');
+    String? token = sharedPreferences.getString('token');
 
-    if (accessToken == null) {
+    if (token == null) {
       return false;
     } else {
       return true;
     }
   }
 
-  static Future<bool> checkStudentLoginState() async {
+  static Future<void> getAuthData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    accessToken1 = sharedPreferences.getString('token');
-    email1 = sharedPreferences.getString('email');
-    fullName1 = sharedPreferences.getString('fullName');
-    studentId1 = sharedPreferences.getString('studentId');
-    department1 = sharedPreferences.getString('department');
-    batch1 = sharedPreferences.getString('batch');
-    section1 = sharedPreferences.getString('section');
-    count1 = sharedPreferences.getString('count');
 
-    if (accessToken1 == null) {
-      return false;
-    } else {
-      return true;
-    }
+    token = sharedPreferences.getString('token');
+    firstName = sharedPreferences.getString('firstName');
+    lastName = sharedPreferences.getString('lastName');
+    profilePic = sharedPreferences.getString('photo');
+    mobile = sharedPreferences.getString('mobile');
+    email = sharedPreferences.getString('email');
   }
 
-/*  static Future<void> clear() async {
-    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  static Future<void> clearData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.clear();
-    Get.offAll(() => const FacSignInScreen());
   }
 
-  static Future<void> clear2() async {
-    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.clear();
-    Get.offAll(() => const StuSignInScreen());
+  static showBase64Image(base64Image){
+    UriData? data = Uri.parse(base64Image).data;
+    Uint8List myImage = data!.contentAsBytes();
+    return myImage;
   }
-
-  static Future<void> clearStu() async {
-    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.clear();
-    Get.offAll(() => const StuSignInScreen());
-  }*/
-
-// static bool get isLoggedIn {
-//   return accessToken != null;
-// }
 }

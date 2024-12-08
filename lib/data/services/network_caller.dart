@@ -1,93 +1,94 @@
-/*
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:task_scheduler/application/app.dart';
-import 'package:task_scheduler/data/models/network_response.dart';
 import 'package:task_scheduler/presentation/state_holders/auth_controller.dart';
-import 'package:task_scheduler/presentation/ui/screens/stu_fac_choice_screen.dart';
+import 'package:task_scheduler/presentation/ui/screens/host_screens/host_auth/host_login_screen.dart';
+
 
 class NetworkCaller {
-  static Future<NetworkResponse> getRequest(String url, String token) async {
+  /// Api Get Method
+  Future<dynamic> getMethod(String url,
+      {Map<String, String>? body, VoidCallback? onUnAuthorize}) async {
     try {
-      Response response = await get(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'token': token,
-        },
-      );
-      log(response.statusCode.toString());
+      final http.Response response = await http.get(Uri.parse(url), headers: {
+        'Content-type': 'application/json',
+        'token': AuthController.token ?? ''
+      });
       log(response.body);
       if (response.statusCode == 200) {
-        log(response.statusCode.toString());
-
-        return NetworkResponse(
-          true,
-          response.statusCode,
-          jsonDecode(response.body),
-        );
+        return jsonDecode(response.body);
       } else if (response.statusCode == 401) {
-        //print('object');
-        //gotoLogin();
-      } else {
-        return NetworkResponse(
-          false,
-          response.statusCode,
-          null,
-        );
-      }
-    } catch (e) {
-      log(e.toString());
-    }
-    return NetworkResponse(false, -1, null);
-  }
-
-  static Future<NetworkResponse> postRequest(
-      String url, Map<String, dynamic> body, String token,
-      {bool isLogin = false}) async {
-    try {
-      Response response = await post(
-        Uri.parse(url),
-        headers: {'Content-Type': 'application/json', 'token': token},
-        body: jsonEncode(body),
-      );
-      log(
-        response.statusCode.toString(),
-      );
-      log(response.body);
-      if (response.statusCode == 200) {
-        return NetworkResponse(
-          true,
-          response.statusCode,
-          jsonDecode(response.body),
-        );
-      } else if (response.statusCode == 401) {
-        if (isLogin == false) {
-          gotoLogin();
+        if (onUnAuthorize != null) {
+          onUnAuthorize();
+        } else {
+          moveToLogin();
         }
       } else {
-        return NetworkResponse(
-          false,
-          response.statusCode,
-          null,
-        );
+        log('Something went wrong ${response.statusCode}');
       }
     } catch (e) {
-      log(e.toString());
+      log('Error $e');
     }
-    return NetworkResponse(false, -1, null);
   }
 
-  static Future<void> gotoLogin() async {
-    await AuthController.facAuthClear();
+  /// Api Post Method
+  Future<dynamic> postMethod(String url,
+      {Map<String, String>? body, VoidCallback? onUnAuthorize}) async {
+    try {
+      final http.Response response = await http.post(Uri.parse(url),
+          headers: {
+            'Content-type': 'application/json',
+            'token': AuthController.token ?? ''
+          },
+          body: jsonEncode(body));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else if (response.statusCode == 401) {
+        if (onUnAuthorize != null) {
+          onUnAuthorize();
+        } else {
+          moveToLogin();
+        }
+      } else {
+        log('Something went wrong ${response.statusCode}');
+      }
+    } catch (e) {
+      log('Error $e');
+    }
+  }
+
+  /// Api delete Method
+  Future<dynamic> deleteMethod(String url,
+      {Map<String, String>? body, VoidCallback? onUnAuthorize}) async {
+    try {
+      final http.Response response = await http.get(Uri.parse(url), headers: {
+        'Content-type': 'application/json',
+        'token': AuthController.token ?? ''
+      });
+
+      if (response.statusCode == 200 && jsonDecode(response.body)['status'] == 'success') {
+        return true;
+        //return true;
+      } else if (response.statusCode == 401) {
+        if (onUnAuthorize != null) {
+          onUnAuthorize();
+        }
+      } else {
+        log('Something went wrong ${response.statusCode}');
+      }
+    } catch (e) {
+      log('Error $e');
+    }
+  }
+
+  Future<void> moveToLogin() async {
+    await AuthController.clearData();
     Navigator.pushAndRemoveUntil(
         MeetingScheduler.globalKey.currentContext!,
-        MaterialPageRoute(
-          builder: (context) => const HostGuestChoiceScreen(),
-        ),
-        (route) => false);
+        MaterialPageRoute(builder: (context) => const HostLogInScreen()),
+            (route) => false);
   }
 }
-*/

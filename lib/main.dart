@@ -7,7 +7,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
 
-
   runApp(
     const SafeArea(
       child: MeetingScheduler(),

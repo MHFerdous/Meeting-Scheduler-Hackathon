@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:task_scheduler/data/services/network_caller.dart';
+import 'package:task_scheduler/data/utility/urls.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_auth/host_login_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
@@ -11,6 +13,7 @@ import '../../../widgets/customised_elevated_button.dart';
 
 class HostSignUpScreen extends StatefulWidget {
   const HostSignUpScreen({super.key, required this.email});
+
   final String email;
 
   @override
@@ -23,6 +26,7 @@ class _HostSignUpScreenState extends State<HostSignUpScreen> {
   final TextEditingController _confirmPassTEController =
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool inProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +76,43 @@ class _HostSignUpScreenState extends State<HostSignUpScreen> {
                     height: 42.h,
                   ),
                   CustomisedElevatedButton(
-                    onTap: () async {},
+                    onTap: () async {
+                      if (_formKey.currentState!.validate()) {
+                        inProgress = true;
+                        setState(() {});
+
+                        final result = await NetworkCaller().postMethod(
+                            Urls.hostRegistration,
+                            body: {
+                              'email': _emailTEController.text.trim(),
+                              'password': _confirmPassTEController.text,
+                            });
+
+                        inProgress = false;
+                        setState(() {});
+                        if (result != null && result['status'] == 'success') {
+                          _emailTEController.clear();
+                          _newPassTEController.clear();
+                          _confirmPassTEController.clear();
+
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Registration Successful!', style: TextStyle(color: Colors.white)), backgroundColor: Colors.green));
+                            Navigator.pushAndRemoveUntil(context,
+                                MaterialPageRoute(
+                                    builder: (context) => const HostLogInScreen()), (
+                                    route) => false);
+                          }
+                        } else {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed', style: TextStyle(color: Colors.white)), backgroundColor: Colors.red));
+
+                          }
+                        }
+                      }
+                      },
                     text: 'SIGN UP',
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   InkWell(
@@ -86,30 +123,6 @@ class _HostSignUpScreenState extends State<HostSignUpScreen> {
                     },
                     child: Text('Login'),
                   ),
-                  /*GetBuilder<FacVerifyOTPController>(
-                    builder: (facVerifyOTPController) {
-                      if (facVerifyOTPController.facVerifyOTPInProgress) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.teal,
-                          ),
-                        );
-                      }
-                      return GetBuilder<FacSignUpController>(
-                        builder: (facSignUpController) {
-                          return CustomisedElevatedButton(
-                            onTap: () async {
-                              if (_formKey.currentState!.validate()) {
-                                verifyOTP(facVerifyOTPController,
-                                    facSignUpController);
-                              }
-                            },
-                            text: 'SIGN UP',
-                          );
-                        },
-                      );
-                    },
-                  ),*/
                 ],
               ),
             ),
@@ -118,36 +131,4 @@ class _HostSignUpScreenState extends State<HostSignUpScreen> {
       ),
     );
   }
-
-/*  Future<void> verifyOTP(FacVerifyOTPController facVerifyOTPController,
-      FacSignUpController facSignUpController) async {
-    final result = await facVerifyOTPController.facVerifyOTP(
-      widget.email,
-      _otpTEController.text.trim(),
-    );
-    if (result) {
-      Get.snackbar('Successful!', facVerifyOTPController.message);
-      changePassword(facSignUpController);
-    } else {
-      Get.snackbar('Failed!', facVerifyOTPController.message,
-          colorText: Colors.redAccent);
-    }
-  }*/
-
-/*  Future<void> changePassword(FacSignUpController facSignUpController) async {
-    final result = await facSignUpController.facSignUp(
-      widget.email,
-      _otpTEController.text.trim(),
-      _newPassTEController.text,
-    );
-    if (result) {
-      Get.snackbar('Successful!', facSignUpController.message);
-      Get.to(
-            () => const FacSignInScreen(),
-      );
-    } else {
-      Get.snackbar('Failed!', facSignUpController.message,
-          colorText: Colors.redAccent);
-    }
-  }*/
 }
