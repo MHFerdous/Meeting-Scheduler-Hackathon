@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:task_scheduler/presentation/state_holders/auth_controller.dart';
+import 'package:task_scheduler/presentation/ui/screens/host_screens/host_auth/host_edit_profile_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/customised_elevated_button.dart';
 import 'package:task_scheduler/presentation/ui/widgets/password_text_field.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 import 'package:task_scheduler/presentation/ui/widgets/title_and_subtitle.dart';
 
+import '../../../../../data/services/network_caller.dart';
 import '../../../../../data/utility/urls.dart';
 
 class HostLogInScreen extends StatefulWidget {
@@ -85,15 +88,23 @@ class _HostLogInScreenState extends State<HostLogInScreen> {
                         _emailTEController.clear();
                         _passTEController.clear();
 
+                        await AuthController.saveUserData(
+                          result['data']['email'],
+                          result['token']
+                        );
+
+
                         if (mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Login Successful!',
                                   style: TextStyle(color: Colors.white)),
                                   backgroundColor: Colors.green));
+
+
                           Navigator.pushAndRemoveUntil(context,
                               MaterialPageRoute(
                                   builder: (
-                                      context) => const HostLogInScreen()), (
+                                      context) => const HostEditProfileScreen()), (
                                   route) => false);
                         }
                       } else {

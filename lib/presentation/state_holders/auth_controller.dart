@@ -5,25 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthController {
   static String? firstName, lastName, token, profilePic, mobile, email;
 
-  /// Save user authentication (information)
-  static Future<void> saveUserData(String uFirstName, String uLastName,
-      String uToken, String uProfilePic, String uMobile, String uEmail) async {
+  static Future<void> saveUserData(String uEmail, String uToken) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString('token', uToken);
-    await sharedPreferences.setString('firstName', uFirstName);
-    await sharedPreferences.setString('lastName', uLastName);
-    await sharedPreferences.setString('mobile', uMobile);
-    await sharedPreferences.setString('photo', uProfilePic);
     await sharedPreferences.setString('email', uEmail);
-    firstName = uFirstName;
-    lastName = uLastName;
     token = uToken;
-    profilePic = uProfilePic;
-    mobile = uMobile;
     email = uEmail;
   }
 
-  /// this is check function for really saved the user information or not (T/F)
   static Future<bool> checkLoginState() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? token = sharedPreferences.getString('token');
@@ -39,10 +28,6 @@ class AuthController {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     token = sharedPreferences.getString('token');
-    firstName = sharedPreferences.getString('firstName');
-    lastName = sharedPreferences.getString('lastName');
-    profilePic = sharedPreferences.getString('photo');
-    mobile = sharedPreferences.getString('mobile');
     email = sharedPreferences.getString('email');
   }
 

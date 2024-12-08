@@ -40,7 +40,7 @@ class NetworkCaller {
       final http.Response response = await http.post(Uri.parse(url),
           headers: {
             'Content-type': 'application/json',
-            'token': AuthController.token ?? ''
+            'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM3MzEzNTgsImRhdGEiOiJzb2Z0ZW5naGFzYW4yNUBnbWFpbC5jb20iLCJpYXQiOjE3MzM2NDQ5NTh9.wLteudoqi7R5T2kg_9F2SV9nvxtcxr1a1Se_jpUXCFA'
           },
           body: jsonEncode(body));
 

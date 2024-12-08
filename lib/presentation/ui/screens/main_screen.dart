@@ -20,34 +20,33 @@ class _HostGuestChoiceScreenState extends State<HostGuestChoiceScreen> {
     return Scaffold(
       body: ScreenBackground(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 263.h,
-              ),
-              const AppLogo(),
-              SizedBox(
-                height: 68.h,
-              ),
-              CustomisedElevatedButton(
-                  onTap: () {
-                    Get.to(
-                      () => const HostSignUpScreen(email: 'Host Email',),
-                    );
-                  },
-                  text: 'Host'),
-              SizedBox(
-                height: 50.h,
-              ),
-              CustomisedElevatedButton(
-                  onTap: () {
-                    Get.to(
-                      () => const GuestSignUpScreen(email: "Guest Email"),
-                    );
-                  },
-                  text: 'Guest'),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const AppLogo(),
+                SizedBox(
+                  height: 68.h,
+                ),
+                CustomisedElevatedButton(
+                    onTap: () {
+                      Get.to(
+                        () => const HostSignUpScreen(email: 'Host Email',),
+                      );
+                    },
+                    text: 'Host'),
+                SizedBox(
+                  height: 50.h,
+                ),
+                CustomisedElevatedButton(
+                    onTap: () {
+                      Get.to(
+                        () => const GuestSignUpScreen(email: "Guest Email"),
+                      );
+                    },
+                    text: 'Guest'),
+              ],
+            ),
           ),
         ),
       ),

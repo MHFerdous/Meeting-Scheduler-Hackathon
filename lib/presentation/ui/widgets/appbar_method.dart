@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../screens/main_screen.dart';
 import 'app_logo.dart';
 
 AppBar customisedAppBar( GlobalKey<ScaffoldState> scaffoldKey,
@@ -12,7 +13,8 @@ AppBar customisedAppBar( GlobalKey<ScaffoldState> scaffoldKey,
     leading: IconButton(
       icon: const AppLogo(),
       onPressed: () {
-        scaffoldKey.currentState!.openDrawer();
+        //scaffoldKey.currentState!.openDrawer();
+        Get.to(const HostGuestChoiceScreen());
       },
     ),
     title: Text(
