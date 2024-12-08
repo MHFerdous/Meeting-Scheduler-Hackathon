@@ -11,6 +11,7 @@ import 'package:task_scheduler/presentation/ui/widgets/homepage_card_elevated_bu
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 
 import '../../../../data/models/host_models/most_booked_model.dart';
+import '../../../../data/models/host_models/todays_total_model.dart';
 import '../../widgets/customised_elevated_button.dart';
 
 class HostHomeScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _HostHomeScreenState extends State<HostHomeScreen> {
   MostBookedModel mostBookedModel = MostBookedModel();
+  TodayTotalModel todayTotalModel = TodayTotalModel();
   final TextEditingController _topicTEController = TextEditingController();
   final TextEditingController _startDateController = TextEditingController();
   final TextEditingController _endDateController = TextEditingController();
@@ -32,8 +34,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
   final TextEditingController _meetingController = TextEditingController();
   bool inProgress = false;
 
-  Future<void> _selectDate(
-      BuildContext context, TextEditingController controller) async {
+  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
     DateTime today = DateTime.now();
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -70,9 +71,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
       });
     }
   }
-
-  Future<void> _selectTime(
-      BuildContext context, TextEditingController controller) async {
+  Future<void> _selectTime(BuildContext context, TextEditingController controller) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -121,6 +120,26 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
   void initState() {
     super.initState();
     getMostBooked();
+    getTotal();
+  }
+
+  Future<void> getTotal() async{
+    inProgress = true;
+    setState(() {});
+    final response =
+    await NetworkCaller().getMethod(Urls.hostTotalMeeting('host@yahoo.com','2024-12-09'));
+
+    if (response != null) {
+      todayTotalModel = TodayTotalModel.fromJson(response);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Failed', style: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.red));
+      }
+    }
+    inProgress = false;
+    setState(() {});
   }
 
   Future<void> getMostBooked() async {
@@ -215,7 +234,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '4',
+                                      todayTotalModel.data?.toString() ?? '0',
                                       style: TextStyle(
                                           fontSize: 30.sp,
                                           fontWeight: FontWeight.bold,
