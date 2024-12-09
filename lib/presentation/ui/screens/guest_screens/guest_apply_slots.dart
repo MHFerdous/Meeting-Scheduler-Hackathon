@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:task_scheduler/data/services/network_caller.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 
@@ -27,6 +28,11 @@ class GuestApplySlots extends StatefulWidget {
 class _GuestApplySlotsState extends State<GuestApplySlots> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _guestName = TextEditingController();
+
+  String formatDate(String date) {
+    final DateTime parsedDate = DateTime.parse(date); // Parse the date string
+    return DateFormat('yyyy-MM-dd').format(parsedDate); // Format it to 'YYYY-MM-DD'
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +79,7 @@ class _GuestApplySlotsState extends State<GuestApplySlots> {
                       child: Padding(
                         padding: EdgeInsets.all(16.w),
                         child: Text(
-                          widget.startDate,
+                          formatDate(widget.startDate),
                           style: TextStyle(
                               fontSize: 20.sp, fontWeight: FontWeight.bold),
                         ),
@@ -118,7 +124,7 @@ class _GuestApplySlotsState extends State<GuestApplySlots> {
                       child: Padding(
                         padding: EdgeInsets.all(16.w),
                         child: Text(
-                          widget.endDate,
+                          formatDate(widget.endDate),
                           style: TextStyle(
                               fontSize: 20.sp, fontWeight: FontWeight.bold),
                         ),

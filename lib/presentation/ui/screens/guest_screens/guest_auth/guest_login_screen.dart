@@ -88,7 +88,7 @@ class _GuestLogInScreenState extends State<GuestLogInScreen> {
                         _emailTEController.clear();
                         _passTEController.clear();
 
-                        await AuthController.saveUserData2(
+                        await AuthController.saveUserData(
                             result['data']['email'],
                             result['token']
                         );

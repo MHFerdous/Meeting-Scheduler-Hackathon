@@ -14,7 +14,7 @@ class NetworkCaller {
     try {
       final http.Response response = await http.get(Uri.parse(url), headers: {
         'Content-type': 'application/json',
-        'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM3ODk2NzYsImRhdGEiOiJzb2Z0ZW5naGFzYW4yNUBnbWFpbC5jb20iLCJpYXQiOjE3MzM3MDMyNzZ9.pr22SVa_9ELW9_tMKpsKIjcrfWqTNQ1RBM-9WrzOyhE'
+        'token': AuthController.token.toString()
       });
       log(response.body);
       if (response.statusCode == 200) {
@@ -40,7 +40,7 @@ class NetworkCaller {
       final http.Response response = await http.post(Uri.parse(url),
           headers: {
             'Content-type': 'application/json',
-            'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM3ODk2NzYsImRhdGEiOiJzb2Z0ZW5naGFzYW4yNUBnbWFpbC5jb20iLCJpYXQiOjE3MzM3MDMyNzZ9.pr22SVa_9ELW9_tMKpsKIjcrfWqTNQ1RBM-9WrzOyhE'
+            'token': AuthController.token.toString()
           },
           body: jsonEncode(body));
 
