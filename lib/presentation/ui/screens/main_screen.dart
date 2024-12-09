@@ -7,6 +7,8 @@ import 'package:task_scheduler/presentation/ui/widgets/app_logo.dart';
 import 'package:task_scheduler/presentation/ui/widgets/customised_elevated_button.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 
+import 'admin_panel/admin_dashboard_screen.dart';
+
 
 class HostGuestChoiceScreen extends StatefulWidget {
   const HostGuestChoiceScreen({super.key});
@@ -46,6 +48,16 @@ class _HostGuestChoiceScreenState extends State<HostGuestChoiceScreen> {
                       );
                     },
                     text: 'Guest'),
+                SizedBox(
+                  height: 50.h,
+                ),
+                CustomisedElevatedButton(
+                    onTap: () {
+                      Get.to(
+                        () => const AdminPanelDashboardScreen(),
+                      );
+                    },
+                    text: 'Admin Panel'),
               ],
             ),
           ),

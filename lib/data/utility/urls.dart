@@ -19,6 +19,8 @@ class Urls {
   static const String guestProfile = '$_guestBaseUrl/profile';
   static const String guestSchedules = '$_guestBaseUrl/schedules';
   static const String guestSearch = '$_guestBaseUrl/search';
+  static const String allGuest = '$_guestBaseUrl/allGuest';
+  static String deleteAllGuest(String id) => '$_guestBaseUrl/deleteallGuest/:id';
 
   static String bookedUserInfo(String name, String id) => '$_guestBaseUrl/bookschedule/$id/$name';
 

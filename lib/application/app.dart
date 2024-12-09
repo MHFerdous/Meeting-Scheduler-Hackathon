@@ -7,6 +7,7 @@ import 'package:task_scheduler/presentation/ui/screens/host_screens/host_home_sc
 
 import 'package:task_scheduler/presentation/ui/utility/app_colors.dart';
 
+import '../presentation/ui/screens/main_screen.dart';
 import 'controller_binders.dart';
 
 class MeetingScheduler extends StatefulWidget {
@@ -26,7 +27,7 @@ class MeetingSchedulerState extends State<MeetingScheduler> {
       builder: (context, child) => GetMaterialApp(
         useInheritedMediaQuery: true,
         navigatorKey: MeetingScheduler.globalKey,
-        home: const HostHomeScreen(),
+        home:  HostGuestChoiceScreen(),
         initialBinding: GetXBindings(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
