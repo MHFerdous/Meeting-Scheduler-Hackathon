@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 
 import '../../../../data/models/host_models/booked_user_model.dart';
@@ -8,7 +9,17 @@ import '../../../../data/utility/urls.dart';
 import '../../widgets/appbar_method.dart';
 
 class HostSlotStatusScreen extends StatefulWidget {
-  const HostSlotStatusScreen({super.key, required this.topic, required this.startDate, required this.startTime, required this.endDate, required this.endTime, required this.meetingAddress, required this.remaining, required this.id});
+  const HostSlotStatusScreen(
+      {super.key,
+      required this.topic,
+      required this.startDate,
+      required this.startTime,
+      required this.endDate,
+      required this.endTime,
+      required this.meetingAddress,
+      required this.remaining,
+      required this.id});
+
   final String topic;
   final String startDate;
   final String startTime;
@@ -17,7 +28,6 @@ class HostSlotStatusScreen extends StatefulWidget {
   final String meetingAddress;
   final String remaining;
   final String id;
-
 
   @override
   State<HostSlotStatusScreen> createState() => _HostSlotStatusScreenState();
@@ -37,8 +47,8 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
   Future<void> getBookedUser() async {
     inProgress = true;
     setState(() {});
-    final response =
-    await NetworkCaller().getMethod(Urls.bookedUserInfo('kk@gmail.com', widget.id));
+    final response = await NetworkCaller()
+        .getMethod(Urls.bookedUserInfo('kk@gmail.com', widget.id));
 
     if (response != null) {
       bookedUserModel = BookedUserModel.fromJson(response);
@@ -53,10 +63,16 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
     setState(() {});
   }
 
+  String formatDate(String date) {
+    final DateTime parsedDate = DateTime.parse(date); // Parse the date string
+    return DateFormat('yyyy-MM-dd')
+        .format(parsedDate); // Format it to 'YYYY-MM-DD'
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customisedAppBar(scaffoldKey, context),
+      appBar: customisedAppBar(scaffoldKey, context, 1),
       body: ScreenBackground(
         child: SingleChildScrollView(
           child: Padding(
@@ -100,9 +116,12 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(16.w),
                           child: Text(
-                            widget.startDate,
+                            formatDate(widget.startDate),
                             style: TextStyle(
-                                fontSize: 20.sp, fontWeight: FontWeight.bold),
+                              color: const Color(0xFF0D6858),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20.sp,
+                            ),
                           ),
                         ),
                       ),
@@ -145,7 +164,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(16.w),
                           child: Text(
-                            widget.endDate,
+                            formatDate(widget.endDate),
                             style: TextStyle(
                                 fontSize: 20.sp, fontWeight: FontWeight.bold),
                           ),
@@ -223,9 +242,9 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                       itemCount: 10,
                       itemBuilder: (context, index) {
                         return Container(
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.blueAccent,
+                            color: int.parse(widget.remaining) == 78 ? Colors.grey : Colors.blue,
                           ),
                           alignment: Alignment.center,
                           child: Text(
@@ -261,7 +280,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                       ),
                     ),
                     ListView.separated(
-                      itemCount: bookedUserModel.data!.length-1,
+                      itemCount: bookedUserModel.data?.length ?? 0,
                       primary: false,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
@@ -287,7 +306,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                               ),
                             ),
                             title: Text(
-                              bookedUserModel.data?[index+1].fullName ?? '',
+                              bookedUserModel.data?[index + 1].fullName ?? '',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.sp,

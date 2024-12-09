@@ -113,7 +113,7 @@ class _HostCreateMeetingScreenState extends State<HostCreateMeetingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customisedAppBar(scaffoldKey, context),
+      appBar: customisedAppBar(scaffoldKey, context,1),
       body: ScreenBackground(
         child: SingleChildScrollView(
           child: Padding(

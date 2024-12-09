@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -48,35 +47,33 @@ class _HostMostBookedAnalyticsScreenState
     setState(() {});
   }
 
-  Future<void> downloadCSV() async {
-    List<List<String>> rows = [
-      ["Title", "Start Date", "Start Time", "End Date", "End Time", "Address", "Remaining"]
-    ];
+  Future<void> downloadJSON() async {
+    // Prepare data for JSON export
+    List<Map<String, dynamic>> jsonData = [];
 
-    // Populate rows with data
     for (var item in mostBookedModel.data ?? []) {
-      rows.add([
-        item.title ?? "Unknown",
-        item.startDate ?? "",
-        item.startTime ?? "",
-        item.endDate ?? "",
-        item.endTime ?? "",
-        item.meetingAddress ?? "",
-        item.count.toString()
-      ]);
+      jsonData.add({
+        "Title": item.title ?? "Unknown",
+        "Start Date": item.startDate ?? "",
+        "Start Time": item.startTime ?? "",
+        "End Date": item.endDate ?? "",
+        "End Time": item.endTime ?? "",
+        "Address": item.meetingAddress ?? "",
+        "Remaining": item.count.toString()
+      });
     }
 
-    // Convert to CSV format
-    String csvData = const ListToCsvConverter().convert(rows);
+    // Convert the data to JSON
+    String jsonString = jsonEncode(jsonData);
 
-    // Save to a file
+    // Save JSON to a file
     final directory = await getApplicationDocumentsDirectory(); // Use this method
-    final path = '${directory.path}/most_booked.csv';
+    final path = '${directory.path}/most_booked.json';
     final file = File(path);
-    await file.writeAsString(csvData);
+    await file.writeAsString(jsonString);
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('CSV saved to $path'),
+      content: Text('JSON saved to $path'),
       backgroundColor: Colors.green,
     ));
   }
@@ -88,7 +85,7 @@ class _HostMostBookedAnalyticsScreenState
         title: const Text('Most Booked'),
         actions: [
           IconButton(
-            onPressed: downloadCSV, // Trigger the CSV download
+            onPressed: downloadJSON, // Trigger the JSON download
             icon: const Icon(Icons.download),
           ),
         ],

@@ -26,6 +26,7 @@ dependencies:
   csv: ^6.0.0
   pdf: ^3.11.0
   printing: any
+  path_provider: any
 
 dev_dependencies:
   flutter_test:

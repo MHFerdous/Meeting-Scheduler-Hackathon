@@ -1,6 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../ui/screens/main_screen.dart';
 
 class AuthController {
   static String? firstName, lastName, token,token2, profilePic, mobile, email, email2;
@@ -28,6 +31,7 @@ class AuthController {
     if (token == null) {
       return false;
     } else {
+      Get.to(HostGuestChoiceScreen());
       return true;
     }
   }

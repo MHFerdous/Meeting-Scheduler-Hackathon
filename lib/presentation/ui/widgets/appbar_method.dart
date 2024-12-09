@@ -6,7 +6,14 @@ import '../screens/main_screen.dart';
 import 'app_logo.dart';
 
 AppBar customisedAppBar( GlobalKey<ScaffoldState> scaffoldKey,
-    BuildContext context) {
+    BuildContext context, int check) {
+  String name;
+  if(check == 1){
+    name = "HOST";
+  }
+  else{
+    name = "GUEST";
+  }
   return AppBar(
     automaticallyImplyLeading: false,
     backgroundColor: Colors.white,
@@ -20,7 +27,7 @@ AppBar customisedAppBar( GlobalKey<ScaffoldState> scaffoldKey,
     ),
     title: Text(
       //appBarAuth.toString(),
-      AuthController.email?.toString() ?? '',
+      AuthController.email?.toString() ?? name,
       style: TextStyle(
         fontSize: 16.h,
         fontWeight: FontWeight.w500,

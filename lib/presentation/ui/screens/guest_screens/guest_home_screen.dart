@@ -232,7 +232,7 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customisedAppBar(_scaffoldKey, context),
+      appBar: customisedAppBar(_scaffoldKey, context,0),
       body: Scaffold(
         key: _scaffoldKey,
         drawer: customisedFacultyDrawer(context),

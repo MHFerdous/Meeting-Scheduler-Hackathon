@@ -28,10 +28,28 @@ class _HostEditProfileScreenState extends State<HostEditProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var scaffoldKey = GlobalKey<ScaffoldState>();
   bool inProgress = false;
+
+  final List<String> timeZones = [
+    'UTC',
+    'Asia/Dhaka',
+    'America/New_York',
+    'Europe/London',
+    'Asia/Tokyo',
+    'Australia/Sydney',
+  ];
+
+  String? selectedTimeZone;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedTimeZone = timeZones[0]; // Default value is the first item in the list
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customisedAppBar(scaffoldKey, context),
+      appBar: customisedAppBar(scaffoldKey, context,1),
       body: ScreenBackground(
         child: Form(
           key: _formKey,
@@ -40,7 +58,7 @@ class _HostEditProfileScreenState extends State<HostEditProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 80,),
+                const SizedBox(height: 80),
                 const AppLogo(),
                 SizedBox(
                   height: 30.h,
@@ -48,35 +66,53 @@ class _HostEditProfileScreenState extends State<HostEditProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Host Full Name',
-                      style: TextStyle(
+                    Text(
+                      _hostFullName.text.isEmpty ? 'Host Full Name' : _hostFullName.text,
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    IconButton(onPressed: (){
-                      showDialog(context: context, builder: (context){
-                        return AlertDialog(
-                          title: const Text('Confirmation'),
-                          content: TextFormField(
-                            controller: _hostFullName,
-                            decoration: const InputDecoration(
-                              hintText: 'Full Name'
-                            ),
-                          ),
-                          actions: [
-                            TextButton(onPressed: (){
-                              Navigator.pop(context);
-
-                            }, child: const Text('Cancel', style: TextStyle(color: Colors.black),)),
-                            TextButton(onPressed: (){
-                              Navigator.pop(context);
-                            }, child: const Text('Done',style: TextStyle(color: Colors.black),),),
-                          ],
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Confirmation'),
+                              content: TextFormField(
+                                controller: _hostFullName,
+                                decoration: const InputDecoration(
+                                  hintText: 'Full Name',
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Close the dialog
+                                  },
+                                  child: const Text(
+                                    'Cancel',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {}); // Trigger a rebuild to update the text
+                                    Navigator.pop(context); // Close the dialog
+                                  },
+                                  child: const Text(
+                                    'Done',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         );
-                      });
-                    }, icon: const Icon(Icons.edit),),
+                      },
+                      icon: const Icon(Icons.edit),
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -110,7 +146,6 @@ class _HostEditProfileScreenState extends State<HostEditProfileScreen> {
                 SizedBox(
                   height: 12.h,
                 ),
-
                 SizedBox(
                   width: 323.w,
                   child: TextFormField(
@@ -122,12 +157,23 @@ class _HostEditProfileScreenState extends State<HostEditProfileScreen> {
                 SizedBox(
                   height: 12.h,
                 ),
+                // Time Zone Dropdown
                 SizedBox(
                   width: 323.w,
-                  child: TextFormField(
-                    controller: _timezone,
-                    textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(hintText: 'Time Zone'),
+                  child: DropdownButtonFormField<String>(
+                    value: selectedTimeZone,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedTimeZone = newValue!;
+                      });
+                    },
+                    items: timeZones.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    decoration: InputDecoration(hintText: 'Select Time Zone'),
                   ),
                 ),
                 SizedBox(
@@ -146,37 +192,51 @@ class _HostEditProfileScreenState extends State<HostEditProfileScreen> {
                             "fullName": _hostFullName.text,
                             "title": _hostDesignation.text,
                             "companyName": _companyName.text,
-                            "mobile": _contactNumber.text ,
-                            "timeZone": _timezone.text
+                            "mobile": _contactNumber.text,
+                            "timeZone": _timezone.text,
                           });
 
                       inProgress = false;
                       setState(() {});
                       if (result != null && result['status'] == 'success') {
-                       _hostDesignation.clear();
-                       _hostFullName.clear();
-                       _contactNumber.clear();
-                       _companyName.clear();
-                       _timezone.clear();
+                        _hostDesignation.clear();
+                        _hostFullName.clear();
+                        _contactNumber.clear();
+                        _companyName.clear();
 
                         if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Profile Saved Successful!', style: TextStyle(color: Colors.white)), backgroundColor: Colors.green));
-                          Navigator.pushAndRemoveUntil(context,
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Profile Saved Successfully!',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                          Navigator.pushAndRemoveUntil(
+                              context,
                               MaterialPageRoute(
-                                  builder: (context) => const HostHomeScreen()), (
-                                  route) => false);
+                                  builder: (context) => const HostHomeScreen()),
+                                  (route) => false);
                         }
                       } else {
                         if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed', style: TextStyle(color: Colors.white)), backgroundColor: Colors.red));
-
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Failed',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
                         }
                       }
                     }
                   },
                   text: 'Save',
                 ),
-            
                 SizedBox(
                   height: 34.h,
                 ),
@@ -187,5 +247,4 @@ class _HostEditProfileScreenState extends State<HostEditProfileScreen> {
       ),
     );
   }
-
 }

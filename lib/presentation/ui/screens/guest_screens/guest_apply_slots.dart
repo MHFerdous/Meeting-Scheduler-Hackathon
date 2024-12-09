@@ -31,7 +31,7 @@ class _GuestApplySlotsState extends State<GuestApplySlots> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customisedAppBar(scaffoldKey, context),
+      appBar: customisedAppBar(scaffoldKey, context,0),
       body: ScreenBackground(
         child: SingleChildScrollView(
           child: Column(
@@ -159,7 +159,7 @@ class _GuestApplySlotsState extends State<GuestApplySlots> {
                           fontSize: 20.sp, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "Fetch from api",
+                      "10.00 PM",
                       style: TextStyle(
                           fontSize: 20.sp, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.start,

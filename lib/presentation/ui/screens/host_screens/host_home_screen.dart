@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:task_scheduler/data/services/network_caller.dart';
 import 'package:task_scheduler/data/utility/urls.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_create_meeting_screen.dart';
@@ -67,7 +68,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
     if (pickedDate != null) {
       setState(() {
         controller.text =
-            "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
+        "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
       });
     }
   }
@@ -147,9 +148,9 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
   Future<void> getMostBooked() async {
     inProgress = true;
     setState(() {});
-    final response =
-        await NetworkCaller().getMethod(Urls.hostMostBooked('host@yahoo.com'));
+    final response = await NetworkCaller().getMethod(Urls.hostMostBooked('host@yahoo.com'));
 
+    print(response);
     if (response != null) {
       mostBookedModel = MostBookedModel.fromJson(response);
     } else {
@@ -161,12 +162,13 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
     }
     inProgress = false;
     setState(() {});
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customisedAppBar(scaffoldKey, context),
+      appBar: customisedAppBar(scaffoldKey, context,1),
       body: Scaffold(
         key: scaffoldKey,
         drawer: customisedFacultyDrawer(context),
@@ -333,7 +335,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                     color: 0xFFF8FFAC,
                     onTap: () {
                       Get.to(
-                        () => const HostCreateMeetingScreen(),
+                            () => const HostCreateMeetingScreen(),
                       );
                     },
                   ),
@@ -351,7 +353,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                     color: 0xFFCBD0F9,
                     onTap: () {
                       Get.to(
-                        () => const HostNav(),
+                            () => const HostNav(),
                       );
                     },
                   ),
@@ -384,18 +386,18 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                       HostSlotStatusScreen(
                         topic: mostBookedModel.data![index].title.toString(),
                         startDate:
-                            mostBookedModel.data![index].startDate.toString(),
+                        mostBookedModel.data![index].startDate.toString(),
                         startTime:
-                            mostBookedModel.data![index].startTime.toString(),
+                        mostBookedModel.data![index].startTime.toString(),
                         endDate:
-                            mostBookedModel.data![index].endDate.toString(),
+                        mostBookedModel.data![index].endDate.toString(),
                         endTime:
-                            mostBookedModel.data![index].endTime.toString(),
+                        mostBookedModel.data![index].endTime.toString(),
                         meetingAddress: mostBookedModel
                             .data![index].meetingAddress
                             .toString(),
                         remaining:
-                            mostBookedModel.data![index].count.toString(),
+                        mostBookedModel.data![index].count.toString(),
                         id: mostBookedModel.data![index].sId.toString(),
                       ),
                     );
@@ -428,20 +430,20 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                                             content: SingleChildScrollView(
                                               child: Column(
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
+                                                CrossAxisAlignment.center,
                                                 children: [
                                                   TextFormField(
                                                     controller:
-                                                        _topicTEController,
+                                                    _topicTEController,
                                                     textInputAction:
-                                                        TextInputAction.next,
+                                                    TextInputAction.next,
                                                     decoration:
-                                                        const InputDecoration(
-                                                            hintText: 'Topic'),
+                                                    const InputDecoration(
+                                                        hintText: 'Topic'),
                                                     validator: (String? value) {
                                                       if (value
-                                                              ?.trim()
-                                                              .isEmpty ??
+                                                          ?.trim()
+                                                          .isEmpty ??
                                                           true) {
                                                         return 'Please enter your Topic';
                                                       }
@@ -454,7 +456,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                                                     style: TextStyle(
                                                         fontSize: 25.sp,
                                                         fontWeight:
-                                                            FontWeight.bold),
+                                                        FontWeight.bold),
                                                     textAlign: TextAlign.center,
                                                   ),
                                                   SizedBox(height: 40.h),
@@ -467,15 +469,15 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                                                               _startDateController),
                                                           child: AbsorbPointer(
                                                             child:
-                                                                TextFormField(
+                                                            TextFormField(
                                                               controller:
-                                                                  _startDateController,
+                                                              _startDateController,
                                                               decoration:
-                                                                  const InputDecoration(
+                                                              const InputDecoration(
                                                                 labelText:
-                                                                    "Start Date",
+                                                                "Start Date",
                                                                 border:
-                                                                    OutlineInputBorder(),
+                                                                OutlineInputBorder(),
                                                               ),
                                                             ),
                                                           ),
@@ -489,15 +491,15 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                                                               _startTimeController),
                                                           child: AbsorbPointer(
                                                             child:
-                                                                TextFormField(
+                                                            TextFormField(
                                                               controller:
-                                                                  _startTimeController,
+                                                              _startTimeController,
                                                               decoration:
-                                                                  const InputDecoration(
+                                                              const InputDecoration(
                                                                 labelText:
-                                                                    "Start Time",
+                                                                "Start Time",
                                                                 border:
-                                                                    OutlineInputBorder(),
+                                                                OutlineInputBorder(),
                                                               ),
                                                             ),
                                                           ),
@@ -510,7 +512,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                                                     "TO",
                                                     style: TextStyle(
                                                         fontWeight:
-                                                            FontWeight.bold,
+                                                        FontWeight.bold,
                                                         fontSize: 25.sp),
                                                   ),
                                                   SizedBox(height: 30.h),
@@ -523,15 +525,15 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                                                               _endDateController),
                                                           child: AbsorbPointer(
                                                             child:
-                                                                TextFormField(
+                                                            TextFormField(
                                                               controller:
-                                                                  _endDateController,
+                                                              _endDateController,
                                                               decoration:
-                                                                  const InputDecoration(
+                                                              const InputDecoration(
                                                                 labelText:
-                                                                    "End Date",
+                                                                "End Date",
                                                                 border:
-                                                                    OutlineInputBorder(),
+                                                                OutlineInputBorder(),
                                                               ),
                                                             ),
                                                           ),
@@ -545,15 +547,15 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                                                               _endTimeController),
                                                           child: AbsorbPointer(
                                                             child:
-                                                                TextFormField(
+                                                            TextFormField(
                                                               controller:
-                                                                  _endTimeController,
+                                                              _endTimeController,
                                                               decoration:
-                                                                  const InputDecoration(
+                                                              const InputDecoration(
                                                                 labelText:
-                                                                    "End Time",
+                                                                "End Time",
                                                                 border:
-                                                                    OutlineInputBorder(),
+                                                                OutlineInputBorder(),
                                                               ),
                                                             ),
                                                           ),
@@ -564,41 +566,41 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                                                   SizedBox(height: 40.h),
                                                   Row(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
+                                                    MainAxisAlignment
+                                                        .center,
                                                     children: [
                                                       Text(
                                                         "Time Zone - ",
                                                         style: TextStyle(
                                                             fontSize: 20.sp,
                                                             fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                            FontWeight
+                                                                .bold),
                                                       ),
                                                       Text(
                                                         "Fetch from api",
                                                         style: TextStyle(
                                                             fontSize: 20.sp,
                                                             fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                            FontWeight
+                                                                .bold),
                                                       ),
                                                     ],
                                                   ),
                                                   SizedBox(height: 40.h),
                                                   TextFormField(
                                                     textInputAction:
-                                                        TextInputAction.next,
+                                                    TextInputAction.next,
                                                     decoration:
-                                                        const InputDecoration(
-                                                            hintText:
-                                                                'Meeting Link / Address'),
+                                                    const InputDecoration(
+                                                        hintText:
+                                                        'Meeting Link / Address'),
                                                     controller:
-                                                        _meetingController,
+                                                    _meetingController,
                                                     validator: (String? value) {
                                                       if (value
-                                                              ?.trim()
-                                                              .isEmpty ??
+                                                          ?.trim()
+                                                          .isEmpty ??
                                                           true) {
                                                         return 'Please enter your Meeting Link / Address';
                                                       }
@@ -626,33 +628,33 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
 
                                                   final result = await NetworkCaller()
                                                       .postMethod(
-                                                          Urls.hostEditSchedule(
-                                                              mostBookedModel
-                                                                  .data![index]
-                                                                  .sId
-                                                                  .toString()),
-                                                          body: {
+                                                      Urls.hostEditSchedule(
+                                                          mostBookedModel
+                                                              .data![index]
+                                                              .sId
+                                                              .toString()),
+                                                      body: {
                                                         "hostEmail":
-                                                            "host@yahoo.com",
+                                                        "host@yahoo.com",
                                                         "hostFullName": "hostt",
                                                         "title":
-                                                            _topicTEController
-                                                                .text,
+                                                        _topicTEController
+                                                            .text,
                                                         "startDate":
-                                                            _startDateController
-                                                                .text,
+                                                        _startDateController
+                                                            .text,
                                                         "startTime":
-                                                            _startTimeController
-                                                                .text,
+                                                        _startTimeController
+                                                            .text,
                                                         "endDate":
-                                                            _endDateController
-                                                                .text,
+                                                        _endDateController
+                                                            .text,
                                                         "endTime":
-                                                            _endTimeController
-                                                                .text,
+                                                        _endTimeController
+                                                            .text,
                                                         "meetingAddress":
-                                                            _meetingController
-                                                                .text
+                                                        _meetingController
+                                                            .text
                                                       });
 
                                                   inProgress = false;
@@ -674,47 +676,47 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
 
                                                     if (mounted) {
                                                       ScaffoldMessenger.of(
-                                                              context)
+                                                          context)
                                                           .showSnackBar(
-                                                              const SnackBar(
-                                                        content: Text(
-                                                            'Added successfully!',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white)),
-                                                        backgroundColor:
+                                                          const SnackBar(
+                                                            content: Text(
+                                                                'Added successfully!',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white)),
+                                                            backgroundColor:
                                                             Colors.green,
-                                                      ));
+                                                          ));
                                                     }
                                                   } else {
                                                     if (mounted) {
                                                       //print("API Response: $result");
                                                       ScaffoldMessenger.of(
-                                                              context)
+                                                          context)
                                                           .showSnackBar(
-                                                              const SnackBar(
-                                                        content: Text(
-                                                            'Edited successfully!',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white)),
-                                                        backgroundColor:
+                                                          const SnackBar(
+                                                            content: Text(
+                                                                'Edited successfully!',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white)),
+                                                            backgroundColor:
                                                             Colors.green,
-                                                      ));
+                                                          ));
                                                       Navigator.pushAndRemoveUntil(
                                                           context,
                                                           MaterialPageRoute(
                                                               builder: (context) =>
-                                                                  const HostHomeScreen()),
-                                                          (route) => false);
+                                                              const HostHomeScreen()),
+                                                              (route) => false);
                                                     }
                                                   }
                                                   Navigator.pushAndRemoveUntil(
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              const HostHomeScreen()),
-                                                      (route) => false);
+                                                          const HostHomeScreen()),
+                                                          (route) => false);
                                                 },
                                                 child: const Text(
                                                   'Done',
@@ -758,7 +760,7 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                       ),
                     ),
                     subtitle: Text(
-                      '${mostBookedModel.data?[index].startDate} (${mostBookedModel.data?[index].startTime}) To ${mostBookedModel.data?[index].endDate}  (${mostBookedModel.data?[index].endTime})',
+                      '${formatDate(mostBookedModel.data?[index].startDate ?? '')} (${mostBookedModel.data?[index].startTime}) To ${formatDate(mostBookedModel.data?[index].endDate ?? '')} (${mostBookedModel.data?[index].endTime})',
                       style: TextStyle(
                         color: const Color(0xFF0D6858),
                         fontWeight: FontWeight.w500,
@@ -789,4 +791,9 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
       ),
     );
   }
+  String formatDate(String date) {
+    final DateTime parsedDate = DateTime.parse(date); // Parse the date string
+    return DateFormat('yyyy-MM-dd').format(parsedDate); // Format it to 'YYYY-MM-DD'
+  }
+
 }
