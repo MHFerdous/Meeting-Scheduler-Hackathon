@@ -1,4 +1,4 @@
-# **Meeting Scheduler**
+# **Meeting Scheduler App**
 
 **This project was developed for the Divisional Hackathon by Team 'confused_coders'.**
 
@@ -8,6 +8,23 @@
 3. Hasan Ahmed  
 
 ---
+
+## **Setup Instructions**
+
+1. **Clone the Repository:**  
+   ```bash
+   git clone https://github.com/username/meeting-scheduler.git
+   ```
+
+   ```bash
+   cd meeting-scheduler
+   ```
+   ```bash
+   flutter pub get
+   flutter run
+   ```
+   
+   ---
 
 ## **Goal**
 
@@ -33,7 +50,7 @@ The **Meeting Scheduler** project aims to design and develop a user-friendly app
    - Guests: Search, book, and manage their schedules effortlessly.  
 
 5. **Enhance User Experience**  
-   - Intuitive, responsive, and timezone-aware interface.  
+   - Responsive, and timezone-aware interface.  
    - Real-time notifications for booking confirmations, updates, and reminders.  
 
 6. **Facilitate Collaboration**  
@@ -110,17 +127,3 @@ The **Meeting Scheduler** project aims to design and develop a user-friendly app
 
 ---
 
-## **Setup Instructions**
-
-1. **Clone the Repository:**  
-   ```bash
-   git clone https://github.com/username/meeting-scheduler.git
-   ```
-
-   ```bash
-   cd meeting-scheduler
-   ```
-   ```bash
-   flutter pub get
-   flutter run
-   ```
