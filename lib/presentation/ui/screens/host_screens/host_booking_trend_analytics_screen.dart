@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:task_scheduler/data/models/host_models/popular_slot_model.dart';
 
 import '../../../../data/services/network_caller.dart';
@@ -44,6 +47,11 @@ class _HostBookingTrendAnalyticsScreenState extends State<HostBookingTrendAnalyt
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        leading: IconButton(onPressed: (){
+          Get.back();
+        }, icon:  Icon(Icons.arrow_circle_left_rounded, size: 35.w, color: Colors.black54,)),
+        backgroundColor: Colors.tealAccent,
         title: const Text('Popular Time Slots'),
       ),
       body: Padding(

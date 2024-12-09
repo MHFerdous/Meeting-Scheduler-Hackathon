@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_scheduler/data/models/guest_model/all_guest_model.dart';
 import 'package:task_scheduler/data/models/guest_model/available_host_model.dart';
+import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 
 import '../../../../data/services/network_caller.dart';
 import '../../../../data/utility/urls.dart';
@@ -73,26 +74,22 @@ class _AllGuestScreenState extends State<AllGuestScreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView.separated(
+        child: ListView.builder(
           itemCount: allGuestModel.data!.length,
           itemBuilder: (context, index) {
-            return ListTile(
-              tileColor: Colors.grey.shade300,
-              title: Text(allGuestModel.data![index].fullName ?? ''),
-              trailing: InkWell(
-                onTap: () async {
-                  // Delete the selected guest
-                  await deleteGuest(allGuestModel.data![index].sId.toString());
-                  print(deleteGuest(allGuestModel.data![index].sId.toString()));
-                },
-                child: const Icon(Icons.delete),
+            return Card(
+              color: Colors.lightBlue.shade100,
+              child: ListTile(
+                title: Text(allGuestModel.data![index].fullName ?? ''),
+                trailing: InkWell(
+                  onTap: () async {
+                    // Delete the selected guest
+                    await deleteGuest(allGuestModel.data![index].sId.toString());
+                    //print(deleteGuest(allGuestModel.data![index].sId.toString()));
+                  },
+                  child: const Icon(Icons.delete),
+                ),
               ),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const Divider(
-              height: 8,
-              thickness: 1,
             );
           },
         ),

@@ -81,7 +81,12 @@ class _HostMostBookedAnalyticsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar:  AppBar(
+        centerTitle: true,
+        leading: IconButton(onPressed: (){
+          Get.back();
+        }, icon:  Icon(Icons.arrow_circle_left_rounded, size: 35.w, color: Colors.black54,)),
+        backgroundColor: Colors.tealAccent,
         title: const Text('Most Booked'),
         actions: [
           IconButton(

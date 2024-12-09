@@ -3,6 +3,7 @@ import 'package:task_scheduler/presentation/ui/screens/admin_panel/all_guest_scr
 import 'package:task_scheduler/presentation/ui/screens/admin_panel/all_host_screen.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_booking_trend_analytics_screen.dart';
 import 'package:task_scheduler/presentation/ui/screens/host_screens/host_most_booked_analytics_screen.dart';
+import 'package:task_scheduler/presentation/ui/widgets/appbar_method.dart';
 
 class AdminPanelDashboardScreen extends StatefulWidget {
   const AdminPanelDashboardScreen({super.key});
@@ -23,6 +24,7 @@ class _AdminPanelDashboardScreenState extends State<AdminPanelDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: customisedAppBar(scaffoldKey, context, 3),
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

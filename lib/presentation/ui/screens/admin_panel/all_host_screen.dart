@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_scheduler/data/models/guest_model/available_host_model.dart';
+import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 
 import '../../../../data/services/network_caller.dart';
 import '../../../../data/utility/urls.dart';
@@ -53,28 +54,25 @@ class _AllHostScreenState extends State<AllHostScreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView.separated(
+        child: ListView.builder(
             itemCount: list.length,
             itemBuilder: (context, index){
-          return ListTile(
-            tileColor: Colors.grey.shade300,
-            title: Text(list[index]),
-            trailing: InkWell(
-                onTap: (){
-                  list.removeAt(index);
-                  setState(() {
+          return Card(
+            color: Colors.lightBlue.shade100,
+            child: ListTile(
+              title: Text(list[index]),
+              trailing: InkWell(
+                  onTap: (){
+                    list.removeAt(index);
+                    setState(() {
 
-                  });
+                    });
 
-                },
-                child: const Icon(Icons.delete)),
+                  },
+                  child: const Icon(Icons.delete)),
+            ),
           );
-        }, separatorBuilder: (BuildContext context, int index) {
-              return const Divider(
-                height: 8,
-                thickness: 1,
-              );
-        },),
+        }, ),
       ),
 
     );

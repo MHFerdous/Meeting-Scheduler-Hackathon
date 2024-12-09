@@ -11,8 +11,11 @@ AppBar customisedAppBar( GlobalKey<ScaffoldState> scaffoldKey,
   if(check == 1){
     name = "HOST";
   }
-  else{
+  else if(check == 0){
     name = "GUEST";
+  }
+  else{
+    name = "Admin";
   }
   return AppBar(
     automaticallyImplyLeading: false,
