@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:task_scheduler/data/services/network_caller.dart';
 import 'package:task_scheduler/data/utility/urls.dart';
 import 'package:task_scheduler/presentation/ui/screens/guest_screens/guest_apply_slots.dart';
@@ -9,10 +9,9 @@ import 'package:task_scheduler/presentation/ui/widgets/appbar_method.dart';
 import 'package:task_scheduler/presentation/ui/widgets/fac_drawer_method.dart';
 import 'package:task_scheduler/presentation/ui/widgets/homepage_card_elevated_button.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
-
 import '../../../../data/models/guest_model/available_host_model.dart';
 import '../../../../data/models/host_models/booked_user_model.dart';
-import '../../../../data/models/host_models/most_booked_model.dart';
+import '../../widgets/currentDate.dart';
 
 class GuestHomeScreen extends StatefulWidget {
   const GuestHomeScreen({super.key});
@@ -378,14 +377,8 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
                             color: const Color(0x999B9B9B), width: 1.w),
                       ),
                       color: Colors.white,
-                      child: Center(
-                        child: Text(
-                          'Current Time & Date',
-                          style: TextStyle(
-                              fontSize: 22.sp,
-                              fontWeight: FontWeight.w900,
-                              color: const Color(0xFF393939)),
-                        ),
+                      child: const Center(
+                        child: Date(),
                       ),
                     ),
                   ),
@@ -451,52 +444,96 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
                                 // Submit button
                                 SizedBox(
                                   width: 100.w,
-                                  child: ElevatedButton(
+                                  child:ElevatedButton(
                                     onPressed: () async {
-                                        inProgress = true;
-                                        setState(() {});
+                                      inProgress = true;
+                                      setState(() {});
 
-                                        final result = await NetworkCaller().postMethod(
-                                            Urls.guestSearch,
-                                            body: {
-                                              "date": dateController.text,
-                                              "time": timeController.text,
-                                              "hostName": "host"
-                                            });
+                                      final result = await NetworkCaller().postMethod(
+                                        Urls.guestSearch,
+                                        body: {
+                                          "date": dateController.text,
+                                          "time": timeController.text,
+                                          "hostName": hostController.text, // Assuming hostController is defined
+                                        },
+                                      );
 
-                                        inProgress = false;
-                                        setState(() {});
-                                        if (result != null && result['message'] == 'success') {
-                                          dateController.clear();
-                                          timeController.clear();
-                                          hostController.clear();
+                                      inProgress = false;
+                                      setState(() {});
 
-                                          if (mounted) {
-                                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Found!', style: TextStyle(color: Colors.white)), backgroundColor: Colors.green));
-                                            showDialog(context: context, builder: (context){
-                                              return AlertDialog(
-                                                title: Text('Found'),
-                                                content: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  children: [
-                                                    for (int i = 0; i < 100; i++)
-                                                       // Check if the index is even
-                                                         Text(bookedUserModel.data?[i+1].fullName.toString() ?? 'kkk'),
+                                      if (result != null && result['message'] == 'success') {
+                                        final List<dynamic> filteredData = result['data'] ?? [];
 
-                                                  ],
-                                                ),
-                                              );
-                                            });
-                                          }
-                                        } else {
-                                          if (mounted) {
-                                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed', style: TextStyle(color: Colors.white)), backgroundColor: Colors.red));
+                                        dateController.clear();
+                                        timeController.clear();
+                                        hostController.clear();
 
+                                        if (mounted) {
+                                          if (filteredData.isNotEmpty) {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: const Text('Filtered Data'),
+                                                  content: SizedBox(
+                                                    width: double.maxFinite,
+                                                    child: ListView.builder(
+                                                      shrinkWrap: true,
+                                                      itemCount: filteredData.length,
+                                                      itemBuilder: (context, index) {
+                                                        final dataItem = filteredData[index];
+                                                        return ListTile(
+                                                          title: Text(dataItem['fullName'] ?? 'No Name'),
+                                                          subtitle: Text(dataItem['id']?.toString() ?? 'No ID'),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          } else {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return const AlertDialog(
+                                                  title: Text('No Data'),
+                                                  content: Text('No matching data found.'),
+                                                );
+                                              },
+                                            );
                                           }
                                         }
+                                      }
+                                      else if (result != null && result['status'] == 404) {
+                                        dateController.clear();
+                                        timeController.clear();
+                                        hostController.clear();
+                                        if (mounted) {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return const AlertDialog(
+                                                title: Text('No Data'),
+                                                content: Text('No matching data found.'),
+                                              );
+                                            },
+                                          );
+                                        }
+                                      } else {
+                                        if (mounted) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text('Failed to fetch data', style: TextStyle(color: Colors.white)),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        }
+                                      }
                                     },
                                     child: const Text('Filter'),
                                   ),
+
                                 ),
                               ],
                             ),
@@ -538,11 +575,11 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
                     ),
                   ),
                   subtitle: Text(
-                    '${availableHostModel.data?[index].startDate} (${availableHostModel.data?[index].startTime}) To ${availableHostModel.data?[index].endDate}  (${availableHostModel.data?[index].endTime})',
+                    'Start: ${formatDate(availableHostModel.data?[index].startDate ?? '')} (${availableHostModel.data?[index].startTime})\nEnd: ${formatDate(availableHostModel.data?[index].endDate ?? '')} (${availableHostModel.data?[index].endTime})',
                     style: TextStyle(
                       color: const Color(0xFF0D6858),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.sp,
                     ),
                   ),
                   trailing: IconButton(
@@ -584,5 +621,9 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
         ],
       ),
     );
+  }
+  String formatDate(String date) {
+    final DateTime parsedDate = DateTime.parse(date); // Parse the date string
+    return DateFormat('yyyy-MM-dd').format(parsedDate); // Format it to 'YYYY-MM-DD'
   }
 }

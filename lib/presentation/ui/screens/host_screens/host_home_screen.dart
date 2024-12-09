@@ -11,6 +11,7 @@ import 'package:task_scheduler/presentation/ui/widgets/homepage_card_elevated_bu
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 import '../../../../data/models/host_models/most_booked_model.dart';
 import '../../../../data/models/host_models/todays_total_model.dart';
+import '../../widgets/currentDate.dart';
 import '../../widgets/host_nav.dart';
 import 'host_slot_status_screen.dart';
 
@@ -314,14 +315,8 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                             color: const Color(0x999B9B9B), width: 1.w),
                       ),
                       color: Colors.white,
-                      child: Center(
-                        child: Text(
-                          'Current Time & Date',
-                          style: TextStyle(
-                              fontSize: 22.sp,
-                              fontWeight: FontWeight.w900,
-                              color: const Color(0xFF393939)),
-                        ),
+                      child: const Center(
+                        child: Date(),
                       ),
                     ),
                   ),
@@ -754,17 +749,17 @@ class _HostHomeScreenState extends State<HostHomeScreen> {
                     title: Text(
                       mostBookedModel.data?[index].title ?? 'Unknown',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: const Color(0xFF0D6858),
                         fontWeight: FontWeight.w500,
-                        fontSize: 20.sp,
+                        fontSize: 22.sp,
                       ),
                     ),
                     subtitle: Text(
-                      '${formatDate(mostBookedModel.data?[index].startDate ?? '')} (${mostBookedModel.data?[index].startTime}) To ${formatDate(mostBookedModel.data?[index].endDate ?? '')} (${mostBookedModel.data?[index].endTime})',
+                      'Start: ${formatDate(mostBookedModel.data?[index].startDate ?? '')} (${mostBookedModel.data?[index].startTime})\nEnd: ${formatDate(mostBookedModel.data?[index].endDate ?? '')} (${mostBookedModel.data?[index].endTime})',
                       style: TextStyle(
-                        color: const Color(0xFF0D6858),
+                        color: Colors.black,
                         fontWeight: FontWeight.w500,
-                        fontSize: 12.sp,
+                        fontSize: 16.sp,
                       ),
                     ),
                     trailing: IconButton(

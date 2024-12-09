@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:task_scheduler/data/services/network_caller.dart';
+import 'package:task_scheduler/presentation/ui/screens/guest_screens/guest_home_screen.dart';
 import 'package:task_scheduler/presentation/ui/widgets/screen_background.dart';
 
 import '../../../../data/utility/urls.dart';
@@ -223,13 +226,16 @@ class _GuestApplySlotsState extends State<GuestApplySlots> {
               SizedBox(height: 20.h),
               CustomisedElevatedButton(
                   onTap: () async {
-
+                    setState(() {});
                     final response = await NetworkCaller().getMethod(Urls.bookedUserInfo(_guestName.text, widget.id));
                     if (response != null) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Book message sent', style: TextStyle(color: Colors.white)),
                           backgroundColor: Colors.green));
                       //availableHostModel = AvailableHostModel.fromJson(response);
+                      _guestName.clear();
+                      Get.to(const GuestHomeScreen());
+
                     } else {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -246,4 +252,5 @@ class _GuestApplySlotsState extends State<GuestApplySlots> {
       ),
     );
   }
+
 }

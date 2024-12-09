@@ -54,9 +54,9 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
       bookedUserModel = BookedUserModel.fromJson(response);
     } else {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Failed', style: TextStyle(color: Colors.white)),
-            backgroundColor: Colors.red));
+        // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        //     content: Text('Failed', style: TextStyle(color: Colors.white)),
+        //     backgroundColor: Colors.red));
       }
     }
     inProgress = false;
@@ -192,7 +192,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                 ),
                 SizedBox(height: 40.h),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
                       width: 20.w,
@@ -203,7 +203,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                           fontSize: 20.sp, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "Fetch from api",
+                      "2.30 PM",
                       style: TextStyle(
                           fontSize: 20.sp, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.start,
@@ -222,7 +222,7 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                 ),
                 SizedBox(height: 40.h),
                 Text(
-                  'Booked:',
+                  'Booked',
                   style:
                       TextStyle(fontWeight: FontWeight.bold, fontSize: 25.sp),
                   textAlign: TextAlign.start,
@@ -244,20 +244,21 @@ class _HostSlotStatusScreenState extends State<HostSlotStatusScreen> {
                         return Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: int.parse(widget.remaining) == 78 ? Colors.grey : Colors.blue,
+                            color: index < int.parse(widget.remaining) ? Colors.white : Colors.red.shade200,
                           ),
                           alignment: Alignment.center,
                           child: Text(
                             (index + 1).toString(),
                             style: TextStyle(
                               fontSize: 26.sp,
-                              color: Colors.white,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         );
                       },
                     ),
+
                   ),
                 ),
                 SizedBox(height: 40.h),
